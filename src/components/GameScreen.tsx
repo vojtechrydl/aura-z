@@ -171,6 +171,7 @@ export function GameScreen({
       {state.activeQuestion && activePlayer && (
         <QuestionModal
           active={state.activeQuestion}
+          variant={variant}
           player={activePlayer}
           timeLeft={isAITurn ? 1 : timeLeft}
           timeLimit={isAITurn ? 1 : TIME_LIMIT}

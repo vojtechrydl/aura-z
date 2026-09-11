@@ -1,7 +1,8 @@
-import type { ActiveQuestion, PlayerConfig } from '../game/types'
+import type { ActiveQuestion, BoardVariant, PlayerConfig } from '../game/types'
 
 interface QuestionModalProps {
   active: ActiveQuestion
+  variant: BoardVariant
   player: PlayerConfig
   timeLeft: number
   timeLimit: number
@@ -18,6 +19,7 @@ interface QuestionModalProps {
 
 export function QuestionModal({
   active,
+  variant,
   player,
   timeLeft,
   timeLimit,
@@ -63,6 +65,7 @@ export function QuestionModal({
           {active.kind === 'letter' ? (
             <LetterQuestionBody
               active={active}
+              variant={variant}
               isAI={isAI}
               revealed={revealed}
               revealCorrect={revealCorrect}
@@ -88,6 +91,7 @@ export function QuestionModal({
 
 function LetterQuestionBody({
   active,
+  variant,
   isAI,
   revealed,
   revealCorrect,
@@ -97,9 +101,23 @@ function LetterQuestionBody({
   onDontKnow,
 }: Pick<
   QuestionModalProps,
-  'isAI' | 'revealed' | 'revealCorrect' | 'inputValue' | 'onInputChange' | 'onSubmitLetter' | 'onDontKnow'
+  | 'variant'
+  | 'isAI'
+  | 'revealed'
+  | 'revealCorrect'
+  | 'inputValue'
+  | 'onInputChange'
+  | 'onSubmitLetter'
+  | 'onDontKnow'
 > & { active: Extract<ActiveQuestion, { kind: 'letter' }> }) {
   const q = active.question
+  // Classic tiles are numbered — the underlying question still has a
+  // `letter` (same question bank as Finále), but showing it would leak a
+  // free hint that isn't part of that mode. The badge mirrors what's
+  // actually printed on the tile: the letter in Finále, the number in
+  // Classic.
+  const isFinale = variant === 'finale'
+  const badgeLabel = isFinale ? q.letter : String(active.hexId)
   const borderClass = !revealed
     ? 'border-white/15 focus:border-white/50'
     : revealCorrect
@@ -110,7 +128,7 @@ function LetterQuestionBody({
     <>
       <div className="mt-1 flex items-start gap-3">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold text-lg font-extrabold font-display text-onaccent">
-          {q.letter}
+          {badgeLabel}
         </span>
         <h2 className="mt-1 text-lg sm:text-xl font-display font-bold leading-snug text-white">
           {q.question}
@@ -137,7 +155,7 @@ function LetterQuestionBody({
                 disabled={revealed}
                 value={inputValue}
                 onChange={(e) => onInputChange(e.target.value)}
-                placeholder={`Odpověď na písmeno ${q.letter}…`}
+                placeholder={isFinale ? `Odpověď na písmeno ${q.letter}…` : 'Napiš odpověď…'}
                 className={`w-full rounded-2xl border px-4 py-3 text-base font-medium text-white placeholder-white/30 outline-none transition-colors ${borderClass}`}
               />
               <button

@@ -48,14 +48,14 @@ export function GameHUD({ state, onExit }: GameHUDProps) {
           setSoundEnabled(next)
         }}
         aria-label={soundOn ? 'Vypnout zvuk' : 'Zapnout zvuk'}
-        className="shrink-0 rounded-xl border border-white/10 bg-white/5 px-2.5 py-2.5 text-sm hover:bg-white/10 transition-colors"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-sm leading-none hover:bg-white/10 transition-colors"
       >
         {soundOn ? '🔊' : '🔇'}
       </button>
       <button
         type="button"
         onClick={onExit}
-        className="shrink-0 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-bold font-display text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+        className="flex h-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold font-display text-white/70 hover:bg-white/10 hover:text-white transition-colors"
       >
         Menu
       </button>
