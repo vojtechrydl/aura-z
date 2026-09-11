@@ -40,6 +40,7 @@ export function GameScreen({
     yesNoQuestions,
   )
 
+  const [showStartBanner, setShowStartBanner] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [yesNoPick, setYesNoPick] = useState<boolean | null>(null)
   const [revealed, setRevealed] = useState(false)
@@ -145,6 +146,16 @@ export function GameScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.winner])
 
+  // Announce who won the coin toss — fires on first mount and again on every
+  // "Odveta" rematch (cellLetters/cellQuestions get a fresh object identity
+  // each time makeInitialState runs, in both board variants).
+  useEffect(() => {
+    setShowStartBanner(true)
+    const t = window.setTimeout(() => setShowStartBanner(false), 2400)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.cellLetters, state.cellQuestions])
+
   const boardInteractive =
     !state.activeQuestion && !state.winner && !state.players[state.currentPlayer].isAI
 
@@ -167,6 +178,22 @@ export function GameScreen({
       </div>
 
       <ResultToast state={state} />
+
+      {showStartBanner && !state.activeQuestion && (
+        <div className="pointer-events-none fixed inset-x-0 top-24 z-40 flex justify-center px-4">
+          <div
+            className="animate-pop flex items-center gap-2.5 rounded-2xl border px-4 py-2.5 text-sm font-bold font-display shadow-xl backdrop-blur"
+            style={{
+              borderColor: `color-mix(in oklab, ${state.players[state.currentPlayer].color} 40%, transparent)`,
+              backgroundColor: `color-mix(in oklab, ${state.players[state.currentPlayer].color} 15%, transparent)`,
+              color: state.players[state.currentPlayer].color,
+            }}
+          >
+            <span>🎲</span>
+            <span>{state.players[state.currentPlayer].name} losováním začíná!</span>
+          </div>
+        </div>
+      )}
 
       {state.activeQuestion && activePlayer && (
         <QuestionModal

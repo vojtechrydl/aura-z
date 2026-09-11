@@ -51,7 +51,8 @@ export function makeInitialState(
     cells: makeInitialCells(),
     cellLetters: isClassic ? {} : assignCellLetters(Array.from(new Set(letterQuestions.map((q) => q.letter)))),
     cellQuestions: isClassic ? assignCellQuestions(letterQuestions) : {},
-    currentPlayer: 1,
+    // Coin toss for who opens — applies the same way in local 2P and vs-AI.
+    currentPlayer: Math.random() < 0.5 ? 1 : 2,
     players: makePlayers(mode, player1Name, player2Name),
     activeQuestion: null,
     winner: null,

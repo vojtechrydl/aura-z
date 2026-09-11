@@ -61,6 +61,8 @@ diakritiku a interpunkci, navíc se uznávají i varianty ze sloupce
   sady (v obou módech stejně — druhý pokus se ptá jinak, aby to nebyla
   stejná otázka jako napoprvé). Správně → pole se zabarví; špatně → zůstává
   šedé a je pořád volné.
+- **Kdo začíná se losuje náhodně** při startu každé hry (i proti AI) — krátký
+  banner nahoře oznámí, kdo vyhrál los.
 - Tah se vždy střídá, bez ohledu na výsledek.
 - **Vyhrává hráč, jehož souvislá skupina políček stejné barvy spojí
   všechny tři strany trojúhelníku** (Levá / Pravá / Spodní).
