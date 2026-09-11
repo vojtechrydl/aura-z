@@ -14,30 +14,48 @@ export interface PlayerConfig {
   isAI: boolean
 }
 
-export interface Question {
+/** A letter-tile question: free-text answer, tied to a board letter. */
+export interface LetterQuestion {
   id: string
+  letter: string
   question: string
-  options: [string, string, string, string]
-  correctIndex: 0 | 1 | 2 | 3
+  answer: string
+  altAnswers: string[]
   category?: string
-  difficulty?: string
+  difficulty?: number
 }
 
-export interface ActiveQuestion {
-  hexId: number
-  question: Question
-  forPlayer: PlayerId
+/** A yes/no question used when re-claiming an already-greyed-out field. */
+export interface YesNoQuestion {
+  id: string
+  statement: string
+  correct: boolean
+  explanation?: string
+  category?: string
+  difficulty?: number
 }
+
+export type ActiveQuestion =
+  | { kind: 'letter'; hexId: number; forPlayer: PlayerId; question: LetterQuestion }
+  | { kind: 'yesno'; hexId: number; forPlayer: PlayerId; question: YesNoQuestion }
 
 export interface GameState {
   mode: GameMode
   cells: Record<number, CellState>
+  /** Letter assigned to each hex at game start; used for the first (letter) attempt. */
+  cellLetters: Record<number, string>
   currentPlayer: PlayerId
   players: Record<PlayerId, PlayerConfig>
   activeQuestion: ActiveQuestion | null
-  usedQuestionIds: Set<string>
   winner: PlayerId | null
   winningPath: number[] | null
-  lastResult: { hexId: number; correct: boolean; player: PlayerId } | null
+  lastResult: {
+    hexId: number
+    correct: boolean
+    player: PlayerId
+    kind: 'letter' | 'yesno'
+    revealAnswer?: string
+    revealExplanation?: string
+  } | null
   turnCount: number
 }

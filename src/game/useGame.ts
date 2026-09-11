@@ -1,40 +1,54 @@
 import { useCallback, useRef, useState } from 'react'
 import { CELLS, checkWin } from './board'
-import type { CellState, GameMode, GameState, PlayerConfig, PlayerId, Question } from './types'
+import { assignCellLetters } from './letters'
+import { isAnswerAccepted } from './normalize'
+import type {
+  CellState,
+  GameMode,
+  GameState,
+  LetterQuestion,
+  PlayerConfig,
+  PlayerId,
+  YesNoQuestion,
+} from './types'
 
 const PALETTE = {
   p1: { color: 'var(--color-p1)', soft: 'var(--color-p1-soft)' },
   p2: { color: 'var(--color-p2)', soft: 'var(--color-p2-soft)' },
 }
 
-export function makeInitialCells(): Record<number, CellState> {
+function makeInitialCells(): Record<number, CellState> {
   const cells: Record<number, CellState> = {}
   for (const c of CELLS) cells[c.id] = 'empty'
   return cells
+}
+
+function makePlayers(mode: GameMode, p1Name: string, p2Name: string): Record<PlayerId, PlayerConfig> {
+  return {
+    1: { id: 1, name: p1Name, color: PALETTE.p1.color, colorSoft: PALETTE.p1.soft, isAI: false },
+    2: {
+      id: 2,
+      name: p2Name,
+      color: PALETTE.p2.color,
+      colorSoft: PALETTE.p2.soft,
+      isAI: mode === 'ai',
+    },
+  }
 }
 
 export function makeInitialState(
   mode: GameMode,
   player1Name: string,
   player2Name: string,
+  availableLetters: string[],
 ): GameState {
-  const players: Record<PlayerId, PlayerConfig> = {
-    1: { id: 1, name: player1Name, color: PALETTE.p1.color, colorSoft: PALETTE.p1.soft, isAI: false },
-    2: {
-      id: 2,
-      name: player2Name,
-      color: PALETTE.p2.color,
-      colorSoft: PALETTE.p2.soft,
-      isAI: mode === 'ai',
-    },
-  }
   return {
     mode,
     cells: makeInitialCells(),
+    cellLetters: assignCellLetters(availableLetters),
     currentPlayer: 1,
-    players,
+    players: makePlayers(mode, player1Name, player2Name),
     activeQuestion: null,
-    usedQuestionIds: new Set(),
     winner: null,
     winningPath: null,
     lastResult: null,
@@ -42,41 +56,68 @@ export function makeInitialState(
   }
 }
 
-export function useGame(mode: GameMode, player1Name: string, player2Name: string) {
+export function useGame(
+  mode: GameMode,
+  player1Name: string,
+  player2Name: string,
+  letterQuestions: LetterQuestion[],
+  yesNoQuestions: YesNoQuestion[],
+) {
+  const availableLetters = useRef(Array.from(new Set(letterQuestions.map((q) => q.letter))))
   const [state, setState] = useState<GameState>(() =>
-    makeInitialState(mode, player1Name, player2Name),
+    makeInitialState(mode, player1Name, player2Name, availableLetters.current),
   )
   const usedIdsRef = useRef(new Set<string>())
 
-  const pickQuestion = useCallback((pool: Question[]): Question => {
-    const fresh = pool.filter((q) => !usedIdsRef.current.has(q.id))
-    const source = fresh.length > 0 ? fresh : pool
-    const q = source[Math.floor(Math.random() * source.length)]
+  const pickLetterQuestion = useCallback(
+    (letter: string): LetterQuestion => {
+      const forLetter = letterQuestions.filter((q) => q.letter === letter)
+      const fresh = forLetter.filter((q) => !usedIdsRef.current.has(q.id))
+      const pool = fresh.length > 0 ? fresh : forLetter.length > 0 ? forLetter : letterQuestions
+      const q = pool[Math.floor(Math.random() * pool.length)]
+      usedIdsRef.current.add(q.id)
+      return q
+    },
+    [letterQuestions],
+  )
+
+  const pickYesNoQuestion = useCallback((): YesNoQuestion => {
+    const fresh = yesNoQuestions.filter((q) => !usedIdsRef.current.has(q.id))
+    const pool = fresh.length > 0 ? fresh : yesNoQuestions
+    const q = pool[Math.floor(Math.random() * pool.length)]
     usedIdsRef.current.add(q.id)
     return q
-  }, [])
+  }, [yesNoQuestions])
 
   const openQuestion = useCallback(
-    (hexId: number, pool: Question[]) => {
+    (hexId: number) => {
       setState((s) => {
         if (s.winner || s.activeQuestion) return s
-        if (s.cells[hexId] === s.currentPlayer) return s
-        const question = pickQuestion(pool)
+        const cellState = s.cells[hexId]
+        if (cellState !== 'empty' && cellState !== 'gray') return s
+
+        if (cellState === 'gray') {
+          const question = pickYesNoQuestion()
+          return {
+            ...s,
+            activeQuestion: { kind: 'yesno', hexId, forPlayer: s.currentPlayer, question },
+            lastResult: null,
+          }
+        }
+        const letter = s.cellLetters[hexId]
+        const question = pickLetterQuestion(letter)
         return {
           ...s,
-          activeQuestion: { hexId, question, forPlayer: s.currentPlayer },
+          activeQuestion: { kind: 'letter', hexId, forPlayer: s.currentPlayer, question },
           lastResult: null,
         }
       })
     },
-    [pickQuestion],
+    [pickLetterQuestion, pickYesNoQuestion],
   )
 
-  const submitAnswer = useCallback((selectedIndex: number) => {
+  const resolveTurn = useCallback((hexId: number, forPlayer: PlayerId, correct: boolean, kind: 'letter' | 'yesno', revealAnswer?: string, revealExplanation?: string) => {
     setState((s) => {
-      if (!s.activeQuestion) return s
-      const { hexId, question, forPlayer } = s.activeQuestion
-      const correct = selectedIndex === question.correctIndex
       const nextCells: Record<number, CellState> = {
         ...s.cells,
         [hexId]: correct ? forPlayer : 'gray',
@@ -85,9 +126,7 @@ export function useGame(mode: GameMode, player1Name: string, player2Name: string
       let winner: PlayerId | null = null
       let winningPath: number[] | null = null
       if (correct) {
-        const claimed = new Set(
-          CELLS.filter((c) => nextCells[c.id] === forPlayer).map((c) => c.id),
-        )
+        const claimed = new Set(CELLS.filter((c) => nextCells[c.id] === forPlayer).map((c) => c.id))
         const path = checkWin(claimed)
         if (path) {
           winner = forPlayer
@@ -102,16 +141,46 @@ export function useGame(mode: GameMode, player1Name: string, player2Name: string
         winner,
         winningPath,
         currentPlayer: winner ? s.currentPlayer : forPlayer === 1 ? 2 : 1,
-        lastResult: { hexId, correct, player: forPlayer },
+        lastResult: { hexId, correct, player: forPlayer, kind, revealAnswer, revealExplanation },
         turnCount: s.turnCount + 1,
       }
     })
   }, [])
 
-  const reset = useCallback((newMode: GameMode, p1: string, p2: string) => {
-    usedIdsRef.current = new Set()
-    setState(makeInitialState(newMode, p1, p2))
-  }, [])
+  const submitLetterAnswer = useCallback(
+    (text: string) => {
+      if (!state.activeQuestion || state.activeQuestion.kind !== 'letter') return
+      const { hexId, forPlayer, question } = state.activeQuestion
+      const correct = isAnswerAccepted(text, question.answer, question.altAnswers)
+      resolveTurn(hexId, forPlayer, correct, 'letter', question.answer)
+    },
+    [state.activeQuestion, resolveTurn],
+  )
 
-  return { state, openQuestion, submitAnswer, reset }
+  const submitYesNo = useCallback(
+    (picked: boolean) => {
+      if (!state.activeQuestion || state.activeQuestion.kind !== 'yesno') return
+      const { hexId, forPlayer, question } = state.activeQuestion
+      const correct = picked === question.correct
+      resolveTurn(
+        hexId,
+        forPlayer,
+        correct,
+        'yesno',
+        question.correct ? 'ANO' : 'NE',
+        question.explanation,
+      )
+    },
+    [state.activeQuestion, resolveTurn],
+  )
+
+  const reset = useCallback(
+    (newMode: GameMode, p1: string, p2: string) => {
+      usedIdsRef.current = new Set()
+      setState(makeInitialState(newMode, p1, p2, availableLetters.current))
+    },
+    [],
+  )
+
+  return { state, openQuestion, submitLetterAnswer, submitYesNo, reset }
 }

@@ -67,8 +67,8 @@ export const SIDE_LABELS: Record<Side, string> = {
 
 /**
  * Checks whether a player's set of claimed hex ids forms a connected group
- * that touches at least two of the three triangle sides. Returns the
- * connected winning path if found, otherwise null.
+ * that touches all three triangle sides. Returns the connected winning path
+ * if found, otherwise null.
  */
 export function checkWin(claimedIds: Set<number>): number[] | null {
   const visited = new Set<number>()
@@ -94,7 +94,7 @@ export function checkWin(claimedIds: Set<number>): number[] | null {
       }
     }
 
-    if (touchedSides.size >= 2) {
+    if (touchedSides.size === 3) {
       return component
     }
   }

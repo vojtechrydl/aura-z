@@ -12,15 +12,16 @@ interface Session {
 }
 
 export default function App() {
-  const { questions, error } = useQuestions()
+  const { letterQuestions, yesNoQuestions, error } = useQuestions()
   const [session, setSession] = useState<Session | null>(null)
+  const ready = !!letterQuestions && !!yesNoQuestions
 
   if (!session) {
     return (
       <MainMenu
         onStart={(mode, p1, p2) => setSession({ mode, p1, p2, key: Date.now() })}
         questionsError={error}
-        questionsCount={questions?.length ?? null}
+        questionsCount={ready ? letterQuestions!.length : null}
       />
     )
   }
@@ -31,7 +32,8 @@ export default function App() {
       mode={session.mode}
       p1Name={session.p1}
       p2Name={session.p2}
-      questions={questions ?? []}
+      letterQuestions={letterQuestions ?? []}
+      yesNoQuestions={yesNoQuestions ?? []}
       onExit={() => setSession(null)}
     />
   )

@@ -1,0 +1,181 @@
+id,pismeno,otazka,odpoved,alt_odpovedi,kategorie,obtiznost,trvanlivost
+AZ-001,A,"Jak se slangově říká vyzařování a charismatu, které můžeš sbírat i ztrácet?",Aura,auru,Slang,1,evergreen
+AZ-002,A,Jakou dvoupísmennou zkratkou se běžně označuje umělá inteligence?,AI,A.I.|ej aj,Tech a AI,1,evergreen
+AZ-003,A,Jak se souhrnně říká japonskému animovanému filmu a seriálu?,Anime,animé,Film a seriály,1,evergreen
+AZ-004,A,Jak se jmenuje hlasová asistentka od Amazonu?,Alexa,,Tech a AI,2,evergreen
+AZ-005,A,"Jaký operační systém má většina mobilů, které nejsou od Applu?",Android,,Tech a AI,1,evergreen
+AZ-006,A,Jak se odborně říká chorobnému strachu z pavouků?,Arachnofobie,arachnofobia,Všeobecné,2,evergreen
+AZ-007,B,"Jak se říká stavu, kdy máš mozek rozložený z nekonečného scrollování nesmyslných videí?",Brainrot,brain rot|brejnrot,Slang,1,evergreen
+AZ-008,B,Jakým anglickým slovem Gen Z označuje nejlepší kamarádku?,Bestie,besti,Slang,1,evergreen
+AZ-009,B,"Která aplikace tě jednou denně vyzve, ať vyfotíš, co zrovna děláš, přední i zadní kamerou najednou?",BeReal,be real|bíryl,Sítě a appky,2,sezónní
+AZ-010,B,Jak se jmenuje první a dodnes nejznámější kryptoměna?,Bitcoin,bitkoin|BTC,Tech a AI,1,evergreen
+AZ-011,B,Která nezávislá karetní hra postavená na pokerových kombinacích posbírala v roce 2024 herní ceny?,Balatro,,Hry,3,evergreen
+AZ-012,B,"Křestní jméno americké zpěvačky, která má nejvíc cen Grammy v historii?",Beyoncé,beyonce|bejonsé,Hudba,2,sezónní
+AZ-013,C,"Jak se jedním slovem řekne, že je něco tak trapné, až se u toho kroutíš?",Cringe,krindž|krinž,Slang,1,evergreen
+AZ-014,C,"Jak se říká převlékání za postavy z her, anime nebo filmů?",Cosplay,kosplej,Hry,2,evergreen
+AZ-015,C,"Kam se ukládají data, když nejsou v tvém zařízení, ale na cizích serverech?",Cloud,klaud|do cloudu,Tech a AI,1,evergreen
+AZ-016,C,Na koncertě které britské kapely v roce 2025 kamera zabrala objímající se dvojici a rozjela tím celosvětový kiss cam skandál?,Coldplay,kold plej,Hudba,2,sezónní
+AZ-017,C,"Jak se říká titulku, který slibuje mnohem víc, než pak článek nebo video nabídne?",Clickbait,klikbajt|click bait,Sítě a appky,1,evergreen
+AZ-018,C,"Jak se souhrnně říká vytrvalostnímu tréninku na tep, jako je běh nebo kolo?",Cardio,kardio,Sport,1,evergreen
+AZ-019,Č,"Ze které země pochází firma ByteDance, která vlastní TikTok?",Čína,cina|China,Sítě a appky,2,evergreen
+AZ-020,Č,Který seriál HBO z roku 2019 o jaderné havárii patří k nejlépe hodnoceným seriálům vůbec?,Černobyl,Chernobyl,Film a seriály,2,evergreen
+AZ-021,Č,Jaká dubajská sladkost s pistáciovým krémem a kadaífem ovládla v roce 2024 sítě?,Čokoláda,cokolada|dubajská čokoláda,Jídlo a lifestyle,1,sezónní
+AZ-022,Č,"Jak se česky říká optické součásti objektivu i pomůcce, kterou si dáváš do oka místo brýlí?",Čočka,cocka,Všeobecné,2,evergreen
+AZ-023,Č,Jak se říká zařízení s e-inkovým displejem určenému na čtení knih?,Čtečka,ctecka|e-čtečka,Tech a AI,2,evergreen
+AZ-024,Č,Který hmyz podle populárního mýtu „podle fyziky vůbec nemá umět létat“?,Čmelák,cmelak,Všeobecné,2,evergreen
+AZ-025,D,"Jak se říká tomu, když někdo žije v úplných iluzích o svém crushi?",Delulu,deluze|delúlú,Slang,1,evergreen
+AZ-026,D,"Jak se říká momentu v elektronické skladbě, kdy po vygradovaném napětí naskočí beat?",Drop,,Hudba,1,evergreen
+AZ-027,D,"Na které platformě se lidé potkávají na serverech, v místnostech a hlasových kanálech?",Discord,diskord,Sítě a appky,1,evergreen
+AZ-028,D,"Jak se česky jmenuje sci-fi sága o pouštní planetě, koření a obřích písečných červech?",Duna,Dune,Film a seriály,2,evergreen
+AZ-029,D,Který neurotransmiter se spojuje s pocitem odměny a je hlavním podezřelým u závislosti na scrollování?,Dopamin,dopamine,Všeobecné,2,evergreen
+AZ-030,D,"Jak se říká videu, kde umělá inteligence nasadí cizí obličej nebo hlas na jiného člověka?",Deepfake,dípfejk|deep fake,Tech a AI,2,evergreen
+AZ-031,E,"Jak se říká malým obrázkovým znakům, kterými nahrazujeme slova ve zprávách?",Emoji,emodži|emotikony,Sítě a appky,1,evergreen
+AZ-032,E,Podle jaké italské kávy pojmenovala Sabrina Carpenter svůj hit z roku 2024?,Espresso,espreso,Hudba,1,sezónní
+AZ-033,E,"Jak se říká subkultuře s pěšinkou přes oko, černým eyelinerem a pořádnou porcí emocí?",Emo,emouš,Hudba,1,evergreen
+AZ-034,E,"Jak se česky říká písňové soutěži, kterou v roce 2023 poprvé vyhrálo Švédsko potřetí za deset let?",Eurovize,Eurovision,Hudba,2,evergreen
+AZ-035,E,Jak se říká fanouškovskému sestřihu videa na hudbu a s efekty?,Edit,editko|edity,Sítě a appky,2,evergreen
+AZ-036,E,Které hormony se označují jako „hormony štěstí“ a tělo je uvolňuje třeba při pohybu?,Endorfiny,endorfin,Všeobecné,2,evergreen
+AZ-037,F,"Jaká čtyřpísmenná zkratka označuje strach, že ti něco uteče?",FOMO,fear of missing out,Slang,1,evergreen
+AZ-038,F,"Ve které hře se staví, střílí a hraje o takzvanou Victory Royale?",Fortnite,fortnajt,Hry,1,evergreen
+AZ-039,F,"Jak se říká věci, která totálně propadla — opak hitu nebo bangeru?",Flop,flopko,Slang,1,evergreen
+AZ-040,F,"Co si dáš na fotku, aby vypadala jinak, než ve skutečnosti je?",Filtr,filter,Sítě a appky,1,evergreen
+AZ-041,F,"Jak se říká nekonečnému proudu příspěvků, který ti síť sama servíruje?",Feed,fíd|nástěnka,Sítě a appky,1,evergreen
+AZ-042,F,Jak se říká fanouškovskému psaní příběhů o už existujících postavách?,Fanfikce,fanfiction|fanfikšn,Film a seriály,2,evergreen
+AZ-043,G,"Jak se říká tomu, když ti někdo přestane odpovídat a beze slova zmizí?",Ghosting,gostování|goustování,Slang,1,evergreen
+AZ-044,G,Která firma vznikla jako studentský projekt pod názvem BackRub?,Google,gugl,Tech a AI,2,evergreen
+AZ-045,G,Která herní série se odehrává v Los Santos a Vice City?,GTA,Grand Theft Auto,Hry,1,evergreen
+AZ-046,G,"Jak se říká manipulaci, při které ti druhý tvrdí, že sis všechno vymyslel a špatně si to pamatuješ?",Gaslighting,gaslajtink|gaslighting,Slang,2,evergreen
+AZ-047,G,Jak se jmenuje nejprestižnější hudební cena udělovaná v USA?,Grammy,gremi,Hudba,1,evergreen
+AZ-048,G,"Jak se říká proměně k lepšímu, po které tě staří spolužáci nepoznají?",Glowup,glow up|glou ap,Slang,1,evergreen
+AZ-049,H,"Jak se říká vlně nadšeného očekávání kolem nové věci ještě předtím, než vyjde?",Hype,hajp,Slang,1,evergreen
+AZ-050,H,Jak se česky píše slovo pro vlnu nenávistných komentářů?,Hejt,hate|hejtu,Sítě a appky,1,evergreen
+AZ-051,H,"Jak se říká slovu s mřížkou, kterým se obsah třídí do témat?",Hashtag,hešteg|hashtagu,Sítě a appky,1,evergreen
+AZ-052,H,"Ze kterého hudebního žánru vzešly pojmy jako beef, freestyle nebo battle?",Hiphop,hip hop|hip-hop,Hudba,1,evergreen
+AZ-053,H,Ve kterém sportu vyhráli Češi domácí mistrovství světa v Praze v roce 2024?,Hokej,lední hokej,Sport,1,evergreen
+AZ-054,H,Který svátek s vydlabanými dýněmi připadá na 31. října?,Halloween,helouvín|halovín,Všeobecné,1,evergreen
+AZ-055,CH,"Jak se říká psané konverzaci, která probíhá v reálném čase?",Chat,čet,Sítě a appky,1,evergreen
+AZ-056,CH,Který chatbot od OpenAI odstartoval v listopadu 2022 celý AI boom?,ChatGPT,chat GPT|četgépeté,Tech a AI,1,evergreen
+AZ-057,CH,"Jak se řekne, že je někdo v klidu a vůbec nic neřeší?",Chill,čil|chiluje,Slang,1,evergreen
+AZ-058,CH,Jaký prohlížeč má nejvíc uživatelů na světě?,Chrome,kroum|Google Chrome,Tech a AI,1,evergreen
+AZ-059,CH,Který mořský živočich má tři srdce a modrou krev?,Chobotnice,chobotnici|oktopus,Všeobecné,2,evergreen
+AZ-060,CH,"Jakým slovem se nově říká tomu, že někdo vypadá zničeně nebo mu to prostě nesluší?",Chopped,čopd,Slang,3,sezónní
+AZ-061,I,Která síť vznikla přejmenováním aplikace Burbn na check-iny do podniků?,Instagram,insta|IG,Sítě a appky,2,evergreen
+AZ-062,I,"Jak se říká tomu drobnému detailu, kvůli kterému o někoho ze dne na den ztratíš zájem?",Ick,ik,Slang,2,evergreen
+AZ-063,I,Jaký telefon představil Steve Jobs v roce 2007?,iPhone,ajfoun|Iphone,Tech a AI,1,evergreen
+AZ-064,I,"Jak se říká člověku, který si ze sledovanosti na sítích udělal práci?",Influencer,influencerka|influenceři,Sítě a appky,1,evergreen
+AZ-065,I,"Jak se říká situaci, kdy říkáš pravý opak toho, co myslíš vážně?",Ironie,ironii,Všeobecné,1,evergreen
+AZ-066,I,"Jak se odborně říká růstu cen, kvůli kterému si za stovku koupíš každý rok míň?",Inflace,inflaci,Všeobecné,2,evergreen
+AZ-067,J,"Jak se říká momentu v hororu, kdy na tebe něco nečekaně vyskočí?",Jumpscare,džampskér|jump scare,Film a seriály,2,evergreen
+AZ-068,J,Podle kterého basketbalisty se jmenuje nejlegendárnější řada bot od Nike?,Jordan,Michael Jordan|džordn,Sport,2,evergreen
+AZ-069,J,"Ze které země pochází anime, manga i karaoke?",Japonsko,Japan|Japonska,Všeobecné,1,evergreen
+AZ-070,J,"Jaké cvičení kombinuje pozice, dýchání a podložku a jeho kořeny sahají do Indie?",Jóga,joga|yoga,Jídlo a lifestyle,1,evergreen
+AZ-071,J,Jaký hudební žánr dal vzniknout improvizaci jako hlavnímu principu skladby?,Jazz,džez,Hudba,2,evergreen
+AZ-072,J,Jaké ovoce má ve svém logu firma Apple?,Jablko,jablka|apple,Tech a AI,1,evergreen
+AZ-073,K,Který největší hlodavec světa se stal internetovým symbolem naprostého klidu?,Kapybara,kapibara|capybara,Všeobecné,1,evergreen
+AZ-074,K,"Jak se říká korejské popové scéně, ze které pochází BTS i Blackpink?",K-pop,kpop|K pop,Hudba,1,evergreen
+AZ-075,K,Jaký fermentovaný čajový nápoj se prodává v lednicích vedle limonád a chlubí se probiotiky?,Kombucha,kombuča,Jídlo a lifestyle,2,evergreen
+AZ-076,K,Jak se říká zpívání do mikrofonu na playback s textem na obrazovce?,Karaoke,karaoké,Jídlo a lifestyle,1,evergreen
+AZ-077,K,Která česká limonáda vznikla v 60. letech jako domácí odpověď na Coca-Colu?,Kofola,kofolu,Česko,1,evergreen
+AZ-078,K,Jak se souhrnně říká digitálním měnám jako bitcoin nebo ethereum?,Kryptoměna,krypto|kryptoměny,Tech a AI,1,evergreen
+AZ-079,L,"Jak se říká celému příběhovému pozadí postavy nebo světa, které fanoušci znají do detailu?",Lore,lór,Hry,2,evergreen
+AZ-080,L,"Jak se česky píše to, co dáš příspěvku místo palce nahoru?",Lajk,like|lajkovat,Sítě a appky,1,evergreen
+AZ-081,L,"Jak se jmenuje plyšová sběratelská figurka s devíti zuby, která v roce 2025 vyprodala půlku světa?",Labubu,labubi,Jídlo a lifestyle,2,sezónní
+AZ-082,L,"Jak se říká žánru klidné smyčkované hudby, u které se dá učit nebo pracovat?",Lofi,lo-fi|lou fáj,Hudba,2,evergreen
+AZ-083,L,"Jak se říká vysílání, které běží živě a nedá se vrátit?",Livestream,lajvstream|live stream,Sítě a appky,1,evergreen
+AZ-084,L,"Která sociální síť je postavená na kariéře, pracovních kontaktech a nejdelších příspěvcích o „pokoře“?",LinkedIn,linkedin|linkdin,Sítě a appky,1,evergreen
+AZ-085,M,"Jak se česky píše slovo pro internetový vtip, který se šíří v nekonečných variacích?",Mem,meme|mím,Sítě a appky,1,evergreen
+AZ-086,M,"Jak se jedním slovem řekne, že je něco naprosto průměrné a nic extra?",Mid,,Slang,1,evergreen
+AZ-087,M,Která hra s kostkovanou grafikou je nejprodávanější hrou všech dob?,Minecraft,majnkraft,Hry,1,evergreen
+AZ-088,M,Jaký zelený čajový prášek z Japonska ovládl kavárny i Instagram?,Matcha,mača|matča,Jídlo a lifestyle,1,evergreen
+AZ-089,M,"Jak se říká formátu videa, kde někdo před kamerou sní obrovskou porci jídla?",Mukbang,mukbeng,Sítě a appky,2,evergreen
+AZ-090,M,"Jakým anglickým slovem komentuješ příspěvek, který přesně vystihuje tvoje rozpoložení?",Mood,múd,Slang,1,evergreen
+AZ-091,N,"Jak se říká člověku, který působí, jako by jel na autopilota jako vedlejší postava ve hře?",NPC,en pí sí,Slang,1,evergreen
+AZ-092,N,Která streamovací služba začínala jako půjčovna DVD posílaných poštou?,Netflix,netlfix,Film a seriály,1,evergreen
+AZ-093,N,"Co ti mobil pošle, aby tě vytrhl z čehokoli, co zrovna děláš?",Notifikace,notifikaci|notifikace,Tech a AI,1,evergreen
+AZ-094,N,"Jak se říká tesknému pocitu po něčem, co už bylo — třeba po roce 2012?",Nostalgie,nostalgii,Všeobecné,1,evergreen
+AZ-095,N,Která japonská firma vyrábí konzoli Switch a byla založená už v roce 1889?,Nintendo,nintendó,Hry,1,evergreen
+AZ-096,N,Jak se jmenuje základní buňka nervové soustavy?,Neuron,neurony,Všeobecné,2,evergreen
+AZ-097,O,"Jak se jmenuje soška, kterou udělují americká filmová akademie?",Oscar,Oskar,Film a seriály,1,evergreen
+AZ-098,O,"Který americký stát se v memech stal zkratkou pro „místo, kde se dějí bizarnosti“?",Ohio,Ohaio,Slang,1,evergreen
+AZ-099,O,"Jak se říká stavu, kdy nejsi připojený k internetu?",Offline,oflajn|off-line,Tech a AI,1,evergreen
+AZ-100,O,Které sportovní hry se konají jednou za čtyři roky a vznikly ve starověkém Řecku?,Olympiáda,olympijské hry,Sport,1,evergreen
+AZ-101,O,Která firma stojí za ChatGPT?,OpenAI,open ai|openej aj,Tech a AI,1,evergreen
+AZ-102,O,Jak se říká japonskému umění skládání papíru?,Origami,origamy,Všeobecné,2,evergreen
+AZ-103,P,"Jak se říká audio pořadu na pokračování, který si pustíš, kdy chceš?",Podcast,podkast,Sítě a appky,1,evergreen
+AZ-104,P,"Jak se říká zadání, které napíšeš umělé inteligenci?",Prompt,prompty,Tech a AI,1,evergreen
+AZ-105,P,Jaká tříznaková zkratka uvozuje videa natočená jako pohled očima diváka?,POV,point of view,Sítě a appky,1,evergreen
+AZ-106,P,"Jak se říká seznamu skladeb, který si poskládáš a pak ho hraješ dokola?",Playlist,plejlist|play list,Hudba,1,evergreen
+AZ-107,P,"Jaký geometrický útvar má hrací plán AZ-kvízu, ze kterého vychází i tahle hra?",Pyramida,pyramidu|trojúhelník,Všeobecné,1,evergreen
+AZ-108,P,Která živina má v názvu většina tyčinek a nápojů prodávaných ve fitkách?,Protein,proteiny|bílkovina,Jídlo a lifestyle,1,evergreen
+AZ-109,R,"Jak se říká schopnosti sbalit kohokoli jen tím, že otevřeš pusu?",Rizz,riz,Slang,1,evergreen
+AZ-110,R,"Jak se říká situaci, kdy má odpověď v komentářích víc lajků než původní příspěvek?",Ratio,ratiovat|rejšo,Slang,2,evergreen
+AZ-111,R,Jak se jmenuje formát krátkých vertikálních videí na Instagramu?,Reels,reelsy|rýls,Sítě a appky,1,evergreen
+AZ-112,R,Na které platformě si hráči sami staví hry a hrají je mezi sebou?,Roblox,robloks,Hry,1,evergreen
+AZ-113,R,"Jakým slovem se označuje všechno staré, co se zrovna vrátilo do módy?",Retro,retró,Jídlo a lifestyle,1,evergreen
+AZ-114,R,"Jak se říká nové verzi skladby, kterou předělal jiný autor?",Remix,remixy,Hudba,1,evergreen
+AZ-115,Ř,Jaké smažené maso je klasickou náplní českého výletního batohu?,Řízek,řízky|řízku,Česko,1,evergreen
+AZ-116,Ř,Jaká kosmetika se nanáší kartáčkem na oči a v reklamách slibuje objem?,Řasenka,řasenku|maskara,Jídlo a lifestyle,1,evergreen
+AZ-117,Ř,Ve které zemi vznikly olympijské hry?,Řecko,Řecku|Recko,Všeobecné,1,evergreen
+AZ-118,Ř,Ve kterém městě stojí Koloseum?,Řím,Rim|Roma,Všeobecné,1,evergreen
+AZ-119,Ř,Jaký doklad si většina lidí v Česku dělá hned po osmnáctých narozeninách?,Řidičák,řidičský průkaz|řidičák,Česko,1,evergreen
+AZ-120,Ř,Anglické slovo blockchain se skládá ze slov blok a co?,Řetěz,řetězec|chain,Tech a AI,2,evergreen
+AZ-121,S,"Jak se říká typu chlapa, který jede sám na sebe a nepotřebuje smečku?",Sigma,sigmoš,Slang,1,evergreen
+AZ-122,S,"Jak se posměšně říká člověku, který se přehnaně podbízí někomu, do koho je zabouchnutý?",Simp,simpík,Slang,2,evergreen
+AZ-123,S,Která švédská firma udělala ze streamování hudby standard?,Spotify,spotifaj,Hudba,1,evergreen
+AZ-124,S,"Jak se říká sérii dní v řadě, kterou nesmíš přerušit — třeba na Duolingu?",Streak,strík|streaky,Sítě a appky,1,evergreen
+AZ-125,S,"Jak se jmenuje fotka, kterou si člověk udělá sám?",Selfie,selfíčko|selfi,Sítě a appky,1,evergreen
+AZ-126,S,Jaké slovo z virálních videí s toaletami se stalo symbolem nesmyslného internetového obsahu?,Skibidi,skibidy,Slang,1,sezónní
+AZ-127,Š,Která česká automobilka sídlí v Mladé Boleslavi?,Škoda,Škodovka|Skoda,Česko,1,evergreen
+AZ-128,Š,Jak se v Brně říká tramvaji?,Šalina,šalinu,Česko,1,evergreen
+AZ-129,Š,Která desková hra zažila obří comeback po seriálu Dámský gambit?,Šachy,sachy|šach,Hry,1,evergreen
+AZ-130,Š,"Jak se česky řekne template, tedy předpřipravený vzor pro příspěvek nebo dokument?",Šablona,šablonu|template,Sítě a appky,2,evergreen
+AZ-131,Š,"Jak se říká zprávě zakódované tak, aby ji nikdo nepovolaný nepřečetl?",Šifra,šifru|šifrování,Tech a AI,2,evergreen
+AZ-132,Š,Který živočich si nosí svůj domeček na zádech a pohybuje se po slizové stopě?,Šnek,šneka|hlemýžď,Všeobecné,1,evergreen
+AZ-133,T,Která aplikace se v Číně jmenuje Douyin?,TikTok,tik tok|tiktoku,Sítě a appky,2,evergreen
+AZ-134,T,"Jak se říká věci, kterou najednou dělají úplně všichni, a za měsíc nikdo?",Trend,trendy,Sítě a appky,1,evergreen
+AZ-135,T,Na které platformě streameři vysílají živě hlavně hraní her?,Twitch,tvič,Hry,1,evergreen
+AZ-136,T,"Jak se říká krátké ukázce z filmu, která má nalákat do kina?",Trailer,trejler,Film a seriály,1,evergreen
+AZ-137,T,"Jak se říká člověku, který provokuje v komentářích jen proto, aby si užil chaos?",Troll,trol|trollit,Sítě a appky,1,evergreen
+AZ-138,T,"Jakým slovem se popisuje vztah nebo parta, která ti systematicky bere energii?",Toxický,toxic|toxická,Slang,1,evergreen
+AZ-139,U,Jak se říká nahrání souboru z tvého zařízení na internet?,Upload,aplout|uploadovat,Tech a AI,1,evergreen
+AZ-140,U,"Jak se říká videu, ve kterém někdo před kamerou rozbaluje nový produkt?",Unboxing,anboxing,Sítě a appky,1,evergreen
+AZ-141,U,"Co ti přijde do telefonu, aby appka dostala nové funkce a rozbila to, co fungovalo?",Update,apdejt|aktualizace,Tech a AI,1,evergreen
+AZ-142,U,"Jak se jmenuje pátá základní chuť vedle sladké, slané, kyselé a hořké?",Umami,umamu,Jídlo a lifestyle,2,evergreen
+AZ-143,U,Jaký malý čtyřstrunný nástroj pochází z Havaje?,Ukulele,ukulelé,Hudba,2,evergreen
+AZ-144,U,Jak se říká běžeckému závodu delšímu než klasický maraton?,Ultramaraton,ultra|ultramaratón,Sport,2,evergreen
+AZ-145,V,"Jakým slovem se popisuje celková atmosféra místa, písničky nebo člověka?",Vibe,vajb|vibes,Slang,1,evergreen
+AZ-146,V,"Jak se řekne, že se obsah lavinovitě rozšířil po celém internetu?",Virál,viral|virálně,Sítě a appky,1,evergreen
+AZ-147,V,"Jaká tříznaková zkratka označuje službu, která schová tvoji IP adresu?",VPN,vé pé en,Tech a AI,1,evergreen
+AZ-148,V,"Jak se říká videodeníku, ve kterém někdo natáčí svůj běžný den?",Vlog,vlogy|vlogovat,Sítě a appky,1,evergreen
+AZ-149,V,Jaký formát hudebních desek se vrátil do módy a prodává se dnes víc než CD?,Vinyl,vinylové desky|vinyly,Hudba,1,evergreen
+AZ-150,V,"Jak se říká hlasovému ovládání i nahrané zprávě, kterou pošleš místo psaní?",Voicemail,voice|hlasovka,Sítě a appky,3,evergreen
+AZ-151,W,Která aplikace je v Česku nejrozšířenější na posílání zpráv mezi rodinou a partou?,WhatsApp,whatsup|vocap,Sítě a appky,1,evergreen
+AZ-152,W,"Jak se říká bezdrátovému připojení k internetu, jehož název není zkratkou ničeho?",WiFi,Wi-Fi|vajfaj,Tech a AI,1,evergreen
+AZ-153,W,"Která hra ti dává šest pokusů uhodnout pětipísmenné slovo, jednou denně?",Wordle,vordl,Hry,2,evergreen
+AZ-154,W,Jaký operační systém běží na většině kancelářských počítačů?,Windows,vindous,Tech a AI,1,evergreen
+AZ-155,W,Jak se jmenuje seriál s Jennou Ortegou o dceři rodiny Addamsovy?,Wednesday,vensdej|Wednesday Addams,Film a seriály,1,evergreen
+AZ-156,W,"Jak se jmenuje prosincový přehled, kterým ti Spotify každý rok připomene, co jsi poslouchal?",Wrapped,Spotify Wrapped,Hudba,1,evergreen
+AZ-157,X,Jak se jmenuje herní konzole od Microsoftu?,Xbox,iksbox,Hry,1,evergreen
+AZ-158,X,Na jaké jednopísmenné jméno přejmenoval Elon Musk Twitter?,X,iks,Sítě a appky,1,evergreen
+AZ-159,X,"Která čínská značka vyrábí telefony, koloběžky, vysavače i auta?",Xiaomi,šiaomi|siaomi,Tech a AI,2,evergreen
+AZ-160,X,"Jaký hudební nástroj tvoří řada dřevěných destiček, do kterých se tluče paličkami?",Xylofon,xylofón,Hudba,2,evergreen
+AZ-161,X,Který vzácný plyn se používá ve výbojkových světlometech aut?,Xenon,xenonu,Všeobecné,3,evergreen
+AZ-162,X,Která značka kopírek se stala obecným slovem pro kopírování dokumentů?,Xerox,xeroxovat,Tech a AI,2,evergreen
+AZ-163,Y,Která platforma vznikla původně jako seznamka s videi?,YouTube,jutub|Youtube,Sítě a appky,1,evergreen
+AZ-164,Y,"Jak se říká člověku, který si z tvorby videí na největší video platformě udělal živobytí?",YouTuber,jutuber|youtubeři,Sítě a appky,1,evergreen
+AZ-165,Y,Jak se jmenuje legendární sněžný muž z Himálaje?,Yeti,jetti|Jeti,Všeobecné,1,evergreen
+AZ-166,Y,Jak se česky jmenuje písmeno Y?,Ypsilon,ypsylon,Česko,1,evergreen
+AZ-167,Y,Která japonská značka vyrábí motorky i hudební nástroje?,Yamaha,jamaha,Všeobecné,2,evergreen
+AZ-168,Y,Ve kterém americkém národním parku tryská gejzír Old Faithful?,Yellowstone,jelouston,Všeobecné,2,evergreen
+AZ-169,Z,Která aplikace se během pandemie stala synonymem pro videohovor?,Zoom,zúm,Tech a AI,1,evergreen
+AZ-170,Z,"Jak se říká oživlé mrtvole, která se belhá za mozky a plní půlku seriálů na Netflixu?",Zombie,zombík|zombí,Film a seriály,1,evergreen
+AZ-171,Z,Jak se hovorově říká příslušníkům generace narozené zhruba mezi lety 1997 a 2012?,Zetkaři,zetka|zetkař,Slang,2,evergreen
+AZ-172,Z,"Jak se anglicky přezdívá generaci Z, analogicky k boomerům?",Zoomer,zúmer|zoomeři,Slang,2,evergreen
+AZ-173,Z,"Jaký formát se používá, když chceš zabalit víc souborů do jednoho?",Zip,zipko|.zip,Tech a AI,1,evergreen
+AZ-174,Z,Jak se česky říká znaku @?,Zavináč,zavinac|at,Česko,1,evergreen
+AZ-175,Ž,"Které zvíře má v krku stejný počet obratlů jako člověk, tedy sedm?",Žirafa,žirafu|zirafa,Všeobecné,2,evergreen
+AZ-176,Ž,Který mořský živočich existuje na Zemi déle než stromy?,Žralok,žraloka|zralok,Všeobecné,2,evergreen
+AZ-177,Ž,Co se podle školní legendy v žaludku tráví sedm let?,Žvýkačka,žvýkačku|zvykacka,Všeobecné,1,evergreen
+AZ-178,Ž,"Jak se česky řekne kategorie jako horor, komedie nebo drama?",Žánr,zanr|žánry,Film a seriály,1,evergreen
+AZ-179,Ž,"Který kov dal jméno době, která následovala po době bronzové?",Železo,zelezo,Všeobecné,2,evergreen
+AZ-180,Ž,Jak se česky říká hitparádě neboli chartu?,Žebříček,zebricek|žebříčku,Hudba,2,evergreen

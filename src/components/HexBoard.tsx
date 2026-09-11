@@ -124,12 +124,12 @@ export function HexBoard({ state, onSelect, interactive, pendingHexId }: HexBoar
             <text
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={cellState === 1 || cellState === 2 ? 20 : 18}
+              fontSize={state.cellLetters[cell.id]?.length > 1 ? 16 : 20}
               fontWeight={800}
               fill={cellState === 1 || cellState === 2 ? '#0b0518' : cellState === 'gray' ? '#8a7fa8' : '#d9c9ff'}
               className="font-display pointer-events-none"
             >
-              {cell.id}
+              {cellState === 'gray' ? '?' : state.cellLetters[cell.id]}
             </text>
           </g>
         )

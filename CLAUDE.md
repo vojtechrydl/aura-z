@@ -10,9 +10,13 @@ co README nepokrývá.
 - Repo je na GitHubu: `vojtechrydl/aura-z` (veřejné). Nasazení na Railway čeká
   na propojení v Railway dashboardu (viz README → Nasazení) — to je jediný
   krok, který nejde udělat z CLI/API bez přihlášení uživatele v prohlížeči.
-- `public/questions.csv` obsahuje 40 ukázkových otázek jako placeholder.
-  Uživatel má vlastní sadu otázek, kterou plánuje nahrát — až dorazí, stačí
-  přepsat tento soubor (zachovat hlavičku) a commitnout, žádný jiný zásah.
+- Otázky jsou hotové, uživatelovy vlastní (ne placeholder): `public/questions-letters.csv`
+  (180 otázek na písmeno, volná textová odpověď) a `public/questions-yesno.csv`
+  (34 ANO/NE otázek pro dotahy na šedá pole). Formát obou je zdokumentovaný
+  v README → Formát otázek.
+- Herní pravidlo: vyhrává hráč, který svou barvou spojí **všechny tři**
+  strany trojúhelníku (ne dvě — to byla chyba v původním zadání, opravená
+  po zpětné vazbě).
 
 ## Jak pracovat na tomto repu
 
@@ -35,8 +39,9 @@ co README nepokrývá.
 - Čistě klientská React/Vite aplikace, žádný herní backend/DB (viz README →
   Tech stack, proč záměrně).
 - Herní logika je čistě oddělená od UI v `src/game/` (deska, sousednost hexů,
-  výherní BFS, AI, načítání CSV) — komponenty v `src/components/` jsou jen
-  prezentační vrstva nad `useGame` hookem.
+  výherní BFS, přiřazení písmen polím, normalizace psaných odpovědí, AI,
+  načítání obou CSV) — komponenty v `src/components/` jsou jen prezentační
+  vrstva nad `useGame` hookem.
 - `server.js` je jen produkční static server pro Railway, ve vývoji se
   nepoužívá (`npm run dev` běží přes Vite).
 

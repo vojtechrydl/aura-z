@@ -5,8 +5,9 @@ import { QuestionModal } from './QuestionModal'
 import { WinOverlay } from './WinOverlay'
 import { ResultToast } from './ResultToast'
 import { useGame } from '../game/useGame'
-import { aiPickOptionIndex, aiWillAnswerCorrectly, pickHexForAI } from '../game/ai'
-import type { GameMode, Question } from '../game/types'
+import { isAnswerAccepted } from '../game/normalize'
+import { aiPickYesNo, aiWillAnswerLetter, aiWillAnswerYesNo, pickHexForAI } from '../game/ai'
+import type { GameMode, LetterQuestion, YesNoQuestion } from '../game/types'
 
 const TIME_LIMIT = 18
 
@@ -14,14 +15,31 @@ interface GameScreenProps {
   mode: GameMode
   p1Name: string
   p2Name: string
-  questions: Question[]
+  letterQuestions: LetterQuestion[]
+  yesNoQuestions: YesNoQuestion[]
   onExit: () => void
 }
 
-export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScreenProps) {
-  const { state, openQuestion, submitAnswer, reset } = useGame(mode, p1Name, p2Name)
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+export function GameScreen({
+  mode,
+  p1Name,
+  p2Name,
+  letterQuestions,
+  yesNoQuestions,
+  onExit,
+}: GameScreenProps) {
+  const { state, openQuestion, submitLetterAnswer, submitYesNo, reset } = useGame(
+    mode,
+    p1Name,
+    p2Name,
+    letterQuestions,
+    yesNoQuestions,
+  )
+
+  const [inputValue, setInputValue] = useState('')
+  const [yesNoPick, setYesNoPick] = useState<boolean | null>(null)
   const [revealed, setRevealed] = useState(false)
+  const [revealCorrect, setRevealCorrect] = useState<boolean | null>(null)
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT)
   const timers = useRef<number[]>([])
 
@@ -35,19 +53,33 @@ export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScre
 
   // reset per-question local UI state whenever a new question opens
   useEffect(() => {
-    setSelectedIndex(null)
+    setInputValue('')
+    setYesNoPick(null)
     setRevealed(false)
+    setRevealCorrect(null)
     setTimeLeft(TIME_LIMIT)
     clearTimers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.activeQuestion?.hexId])
 
-  const finishAnswer = (index: number) => {
-    setSelectedIndex(index)
+  const finishLetterAnswer = (text: string) => {
+    if (!state.activeQuestion || state.activeQuestion.kind !== 'letter') return
+    const q = state.activeQuestion.question
+    const correct = isAnswerAccepted(text, q.answer, q.altAnswers)
+    setInputValue(text)
     setRevealed(true)
-    const t = window.setTimeout(() => {
-      submitAnswer(index)
-    }, 1100)
+    setRevealCorrect(correct)
+    const t = window.setTimeout(() => submitLetterAnswer(text), 1400)
+    timers.current.push(t)
+  }
+
+  const finishYesNo = (picked: boolean) => {
+    if (!state.activeQuestion || state.activeQuestion.kind !== 'yesno') return
+    const q = state.activeQuestion.question
+    setYesNoPick(picked)
+    setRevealed(true)
+    setRevealCorrect(picked === q.correct)
+    const t = window.setTimeout(() => submitYesNo(picked), 1600)
     timers.current.push(t)
   }
 
@@ -55,7 +87,8 @@ export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScre
   useEffect(() => {
     if (!state.activeQuestion || isAITurn || revealed) return
     if (timeLeft <= 0) {
-      finishAnswer(-1)
+      if (state.activeQuestion.kind === 'letter') finishLetterAnswer(inputValue)
+      else finishYesNo(false) // timeout on yes/no counts as a (likely) wrong guess
       return
     }
     const t = window.setTimeout(() => setTimeLeft((v) => v - 1), 1000)
@@ -71,7 +104,7 @@ export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScre
     if (!current.isAI) return
     const t = window.setTimeout(() => {
       const hexId = pickHexForAI(state.cells, state.currentPlayer)
-      openQuestion(hexId, questions)
+      openQuestion(hexId)
     }, 850)
     timers.current.push(t)
     return () => clearTimeout(t)
@@ -81,10 +114,17 @@ export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScre
   // AI: "think" then answer
   useEffect(() => {
     if (!state.activeQuestion || !isAITurn) return
-    const { question } = state.activeQuestion
-    const correct = aiWillAnswerCorrectly(question)
-    const chosen = aiPickOptionIndex(question, correct)
-    const t = window.setTimeout(() => finishAnswer(chosen), 1700)
+    if (state.activeQuestion.kind === 'letter') {
+      const q = state.activeQuestion.question
+      const correct = aiWillAnswerLetter(q)
+      const t = window.setTimeout(() => finishLetterAnswer(correct ? q.answer : '???'), 1700)
+      timers.current.push(t)
+      return () => clearTimeout(t)
+    }
+    const q = state.activeQuestion.question
+    const correct = aiWillAnswerYesNo(q)
+    const pick = aiPickYesNo(q, correct)
+    const t = window.setTimeout(() => finishYesNo(pick), 1700)
     timers.current.push(t)
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,7 +142,7 @@ export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScre
       <div className="flex w-full flex-1 items-center justify-center">
         <HexBoard
           state={state}
-          onSelect={(hexId) => boardInteractive && openQuestion(hexId, questions)}
+          onSelect={(hexId) => boardInteractive && openQuestion(hexId)}
           interactive={boardInteractive}
           pendingHexId={state.activeQuestion?.hexId ?? null}
         />
@@ -112,15 +152,18 @@ export function GameScreen({ mode, p1Name, p2Name, questions, onExit }: GameScre
 
       {state.activeQuestion && activePlayer && (
         <QuestionModal
-          hexId={state.activeQuestion.hexId}
-          question={state.activeQuestion.question}
+          active={state.activeQuestion}
           player={activePlayer}
           timeLeft={isAITurn ? 1 : timeLeft}
           timeLimit={isAITurn ? 1 : TIME_LIMIT}
-          selectedIndex={selectedIndex}
-          revealed={revealed}
           isAI={isAITurn}
-          onSelect={(i) => !revealed && finishAnswer(i)}
+          revealed={revealed}
+          revealCorrect={revealCorrect}
+          inputValue={inputValue}
+          onInputChange={setInputValue}
+          onSubmitLetter={() => finishLetterAnswer(inputValue)}
+          yesNoPick={yesNoPick}
+          onPickYesNo={finishYesNo}
         />
       )}
 

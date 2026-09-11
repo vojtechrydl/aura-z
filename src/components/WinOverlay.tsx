@@ -26,7 +26,7 @@ export function WinOverlay({ winner, onRematch, onMenu }: WinOverlayProps) {
             {winner.name}
           </h2>
           <p className="mt-2 text-sm text-white/60">
-            Propojili barvou dvě strany trojúhelníku. GG!
+            Propojili barvou všechny tři strany trojúhelníku. GG!
           </p>
 
           <div className="mt-6 flex flex-col gap-2.5">

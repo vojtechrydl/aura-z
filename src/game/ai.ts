@@ -1,5 +1,5 @@
 import { CELLS, neighbors } from './board'
-import type { CellState, PlayerId, Question } from './types'
+import type { CellState, LetterQuestion, PlayerId, YesNoQuestion } from './types'
 
 /**
  * Picks a hex for the AI to attempt. Prefers cells that extend its own
@@ -24,20 +24,23 @@ export function pickHexForAI(cells: Record<number, CellState>, player: PlayerId)
   return pool[Math.floor(Math.random() * pool.length)].id
 }
 
-const DIFFICULTY_ACCURACY: Record<string, number> = {
-  lehká: 0.85,
-  střední: 0.65,
-  těžká: 0.45,
+// obtiznost 1 (lehká) -> AI si vzpomene skoro vždy; 3 (těžká) -> spíš netriefne.
+const DIFFICULTY_ACCURACY: Record<number, number> = { 1: 0.85, 2: 0.65, 3: 0.45 }
+
+function accuracyFor(difficulty: number | undefined): number {
+  if (!difficulty) return 0.7
+  return DIFFICULTY_ACCURACY[difficulty] ?? 0.7
 }
 
-export function aiWillAnswerCorrectly(question: Question): boolean {
-  const base = (question.difficulty ? DIFFICULTY_ACCURACY[question.difficulty] : undefined) ?? 0.7
-  return Math.random() < base
+export function aiWillAnswerLetter(question: LetterQuestion): boolean {
+  return Math.random() < accuracyFor(question.difficulty)
 }
 
-/** If the AI "gets it right", also pick which option it shows as its answer. */
-export function aiPickOptionIndex(question: Question, correct: boolean): number {
-  if (correct) return question.correctIndex
-  const wrongOptions = [0, 1, 2, 3].filter((i) => i !== question.correctIndex)
-  return wrongOptions[Math.floor(Math.random() * wrongOptions.length)]
+export function aiWillAnswerYesNo(question: YesNoQuestion): boolean {
+  return Math.random() < accuracyFor(question.difficulty)
+}
+
+/** Which ANO/NE button the AI "presses", given whether it will be correct. */
+export function aiPickYesNo(question: YesNoQuestion, willBeCorrect: boolean): boolean {
+  return willBeCorrect ? question.correct : !question.correct
 }

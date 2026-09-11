@@ -2,8 +2,8 @@
 
 Hexagonová kvízová hra pro Gen Z — jako AZ-kvíz České televize, ale s otázkami
 mířenými na internetovou/Gen Z kulturu. Hráči se střídají po tazích a
-odpovídají na otázky, aby si zabarvili hexová pole na trojúhelníkové desně
-(28 polí, 7 řad). Kdo první propojí svou barvou libovolné dvě ze tří stran
+odpovídají na otázky, aby si zabarvili hexová pole na trojúhelníkové desce
+(28 polí, 7 řad). Kdo první propojí svou barvou všechny tři strany
 trojúhelníku, vyhrává. Špatná odpověď políčko zešedne a je znovu volné pro
 libovolného hráče.
 
@@ -15,8 +15,9 @@ libovolného hráče.
 - **React 19 + TypeScript + Vite** — čistě klientská hra, žádný herní
   server/databáze není potřeba (multiplayer je na jednom zařízení).
 - **Tailwind CSS v4** — vizuální styl.
-- **PapaParse** — otázky se načítají za běhu z [`public/questions.csv`](public/questions.csv),
-  takže výměna otázek nevyžaduje žádný build krok ani zásah do kódu.
+- **PapaParse** — otázky se načítají za běhu ze dvou CSV souborů v `public/`
+  (viz níže), takže výměna otázek nevyžaduje žádný build krok ani zásah do
+  kódu.
 - **Express** (`server.js`) — jednoduchý produkční static server pro Railway
   (Vite dev server se používá jen lokálně).
 
@@ -37,22 +38,61 @@ npm run build      # produkční build do dist/
 npm start           # spustí Express server nad dist/ (co poběží na Railway)
 ```
 
-## Formát otázek (`public/questions.csv`)
+## Herní mechanika
+
+Board má 28 polí. Na začátku hry se každému poli náhodně přidělí jedno
+písmeno abecedy (z těch, pro která existují otázky) — přesně jako na
+skutečné hrací ploše AZ-kvízu.
+
+- **Klikneš na volné (bílé) pole** → dostaneš otázku vázanou na jeho písmeno
+  a **napíšeš odpověď** (žádné ABCD — psaný text jako ve skutečném pořadu).
+  Odpověď se porovná bez ohledu na velikost písmen, diakritiku a interpunkci,
+  navíc se uznávají i varianty ze sloupce `alt_odpovedi`.
+  - Správně → pole se zabarví barvou hráče.
+  - Špatně / vypršel čas → pole **zešedne** a je znovu volné.
+- **Klikneš na šedé pole** → tentokrát dostaneš **otázku ANO/NE** z druhé
+  sady (šedé pole už nemá "svoje" písmeno — ptáme se jinak, aby otázka
+  nebyla stejná jako napoprvé). Správně → pole se zabarví; špatně → zůstává
+  šedé a je pořád volné.
+- Tah se vždy střídá, bez ohledu na výsledek.
+- **Vyhrává hráč, jehož souvislá skupina políček stejné barvy spojí
+  všechny tři strany trojúhelníku** (Levá / Pravá / Spodní).
+
+## Formát otázek
+
+Dva CSV soubory v `public/`, oba se načítají za běhu — chceš-li nahradit
+otázky vlastními, stačí přepsat obsah (zachovat hlavičku sloupců) a nasadit,
+žádný zásah do kódu.
+
+### `public/questions-letters.csv` — otázky na písmeno (hlavní sada)
 
 ```csv
-question,option_a,option_b,option_c,option_d,correct,category,difficulty
-"Text otázky?",Možnost A,Možnost B,Možnost C,Možnost D,B,kategorie,lehká
+id,pismeno,otazka,odpoved,alt_odpovedi,kategorie,obtiznost,trvanlivost
+AZ-001,A,"Jak se slangově říká vyzařování a charismatu?",Aura,auru,Slang,1,evergreen
 ```
 
-- `correct` — písmeno správné odpovědi: `A`/`B`/`C`/`D`.
-- `category`, `difficulty` — nepovinné, `difficulty` (`lehká`/`střední`/`těžká`)
-  ovlivňuje, jak často AI protihráč odpoví správně.
-- Pole obsahující čárku nebo uvozovky musí být v uvozovkách (`"..."`), uvozovky
-  uvnitř se zdvojují (`""`) — standardní CSV escaping.
+- `pismeno` — písmeno, ke kterému se otázka váže (musí odpovídat začátku
+  `odpoved`). Používá se i vícepísmenné `CH`.
+- `odpoved` — kanonická správná odpověď.
+- `alt_odpovedi` — další uznávané varianty oddělené `|` (např.
+  `"A.I.|ej aj"`). Může být prázdné.
+- `obtiznost` — číslo 1–3, ovlivňuje jen to, jak často AI protihráč odpoví
+  správně (1 = AI skoro vždy uspěje, 3 = spíš netrefí).
+- `trvanlivost` — `evergreen` / `sezónní`, jen metadata pro budoucí filtrování
+  (dnes se nepoužívá v herní logice).
 
-Chcete-li nahradit otázky vlastními: stačí přepsat obsah
-`public/questions.csv` (zachovat hlavičku sloupců) a nasadit — žádný jiný
-zásah do kódu není potřeba.
+Potřeba je **aspoň tolik různých písmen, kolik chceš mít na desce (28)** —
+při méně unikátních písmenech se některá zopakují na víc polích.
+
+### `public/questions-yesno.csv` — dotahy na šedá pole
+
+```csv
+id,tvrzeni,spravne,vysvetleni,kategorie,obtiznost,trvanlivost
+AN-001,Instagram původně vznikl jako aplikace na check-iny do podniků.,ANO,Jmenoval se Burbn.,Sítě a appky,2,evergreen
+```
+
+- `spravne` — `ANO` nebo `NE`.
+- `vysvetleni` — nepovinné, zobrazí se po odpovědi jako bonus info.
 
 ## Nasazení na Railway
 
@@ -60,35 +100,26 @@ zásah do kódu není potřeba.
    from GitHub repo*.
 2. Railway auto-detekuje Node.js projekt (Nixpacks) a použije konfiguraci z
    [`railway.json`](railway.json): `npm run build` při buildu, `npm start`
-   při spuštění.
+   při spuštění. `engines.node` v `package.json` vynucuje Node 20+.
 3. Není potřeba nastavovat žádné env proměnné ani databázi pro fázi 1.
-
-## Herní pravidla
-
-- Deska: trojúhelník ze 7 řad hexů (1+2+3+4+5+6+7 = 28 polí), strany označené
-  Levá / Pravá / Spodní.
-- Na tahu hráč klikne na volné (bílé/šedé) pole → zobrazí se otázka se 4
-  možnostmi a časovým limitem.
-- Správná odpověď → pole se zabarví barvou hráče. Špatná odpověď / vypršel čas
-  → pole zešedne a je opět volné pro kohokoli.
-- Tah se vždy střídá, bez ohledu na výsledek.
-- Vítězí hráč, jehož souvislá skupina políček stejné barvy se dotýká
-  libovolných dvou ze tří stran trojúhelníku.
 
 ## Struktura projektu
 
 ```
 src/
   game/
-    board.ts        # deska, sousednost hexů, výherní podmínka (BFS)
+    board.ts        # deska, sousednost hexů, výherní podmínka (BFS, 3 strany)
     geometry.ts      # pixelové souřadnice hexů (SVG)
-    types.ts         # sdílené typy
-    useGame.ts       # herní stav (reducer-like hook)
-    useQuestions.ts  # načtení + parsování questions.csv
-    ai.ts            # logika AI protihráče (výběr pole, přesnost odpovědí)
+    letters.ts        # přiřazení písmen polím na začátku hry
+    normalize.ts       # porovnávání psaných odpovědí (diakritika, varianty)
+    types.ts             # sdílené typy
+    useGame.ts             # herní stav (cells, cellLetters, activeQuestion…)
+    useQuestions.ts          # načtení + parsování obou CSV
+    ai.ts                     # AI protihráč (výběr pole, přesnost, ANO/NE)
   components/        # UI (deska, menu, otázka, HUD, výhra…)
 public/
-  questions.csv       # banka otázek
+  questions-letters.csv   # hlavní banka otázek (na písmeno)
+  questions-yesno.csv      # dotahy na šedá pole (ANO/NE)
 server.js              # produkční static server (Railway)
 railway.json            # Railway build/deploy konfigurace
 ```
@@ -98,4 +129,5 @@ railway.json            # Railway build/deploy konfigurace
 - Online multiplayer (WebSocket server + místnosti) — bude potřeba backend
   a pravděpodobně Postgres/Redis pro stav místností.
 - Ukládání skóre / statistik hráčů.
-- Vlastní kategorie a filtr obtížnosti před hrou.
+- Filtr kategorií/obtížnosti a využití pole `trvanlivost` (např. schovat
+  "sezónní" otázky po uplynutí jejich aktuálnosti).

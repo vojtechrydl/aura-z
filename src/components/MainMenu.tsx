@@ -36,7 +36,7 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
             Aura<span className="text-gold">Z</span>
           </h1>
           <p className="mt-1.5 text-sm text-white/50">
-            Spoj dvě strany trojúhelníku dřív než soupeř.
+            Spoj všechny tři strany trojúhelníku dřív než soupeř.
           </p>
         </div>
 
@@ -109,13 +109,14 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
           )}
           {questionsCount && (
             <p className="mt-3 text-center text-xs text-white/30">
-              {questionsCount} otázek v questions.csv
+              {questionsCount} otázek na písmena · napiš odpověď, žádné ABCD
             </p>
           )}
         </div>
 
         <p className="mt-6 text-center text-xs text-white/25">
-          Klikni na hexové pole, zodpověz otázku a zabarvi ho svojí barvou.
+          Klikni na pole, napiš odpověď na jeho písmeno. Šedá pole se ptají
+          ANO/NE. Vyhraješ, když svou barvou spojíš všechny tři strany.
         </p>
       </div>
     </div>

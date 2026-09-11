@@ -1,0 +1,35 @@
+id,tvrzeni,spravne,vysvetleni,kategorie,obtiznost,trvanlivost
+AN-001,Instagram původně vznikl jako aplikace na check-iny do podniků.,ANO,Jmenoval se Burbn a check-iny byly hlavní funkce.,Sítě a appky,2,evergreen
+AN-002,TikTok se v Číně prodává pod jménem Douyin.,ANO,Je to samostatná verze od stejné firmy ByteDance.,Sítě a appky,2,evergreen
+AN-003,Slovo emoji pochází z angličtiny a souvisí se slovem emotion.,NE,"Je japonské: e = obrázek, modži = znak. Shoda je náhodná.",Sítě a appky,3,evergreen
+AN-004,Spotify je americká firma.,NE,"Je švédská, vzniklo ve Stockholmu v roce 2006.",Hudba,1,evergreen
+AN-005,Nejprodávanější videohrou všech dob je Tetris.,NE,"Je to Minecraft, který Tetris překonal.",Hry,1,evergreen
+AN-006,Wi-Fi je zkratka pro Wireless Fidelity.,NE,"Je to vymyšlený marketingový název, nic neznamená.",Tech a AI,3,evergreen
+AN-007,Discord vznikl původně jako komunikační appka pro hráče.,ANO,Až později se rozšířil mimo gaming.,Sítě a appky,1,evergreen
+AN-008,Slovo mem poprvé použil biolog Richard Dawkins.,ANO,V knize Sobecký gen v roce 1976.,Všeobecné,3,evergreen
+AN-009,YouTube vznikl rovnou jako platforma na sdílení libovolných videí.,NE,"Zakládal se jako videoseznamka. Nápad se neujal, tak lidé začali nahrávat cokoli.",Sítě a appky,2,evergreen
+AN-010,Snapchat se ze začátku jmenoval Picaboo.,ANO,Přejmenoval se ještě v prvním roce.,Sítě a appky,3,evergreen
+AN-011,Netflix od začátku fungoval jako streamovací služba.,NE,"Začínal jako půjčovna DVD posílaných poštou, streamování přidal až v roce 2007.",Film a seriály,1,evergreen
+AN-012,Totožnost tvůrce bitcoinu Satoshiho Nakamota není dodnes potvrzená.,ANO,Existuje jen řada hypotéz.,Tech a AI,2,evergreen
+AN-013,První zpráva poslaná mezi počítači přes síť byla hello world.,NE,Byly to dvě písmena LO — přenos spadl uprostřed slova LOGIN.,Tech a AI,3,evergreen
+AN-014,Google se od svého vzniku jmenoval Google.,NE,"Původně to byl studentský projekt BackRub, pojmenovaný podle zpětných odkazů.",Tech a AI,2,evergreen
+AN-015,Znaku @ se v italštině říká šnek.,ANO,"Chiocciola, tedy hlemýžď. Čeština má zavináč.",Všeobecné,3,evergreen
+AN-016,Nintendo bylo založeno až po druhé světové válce.,NE,Vzniklo v roce 1889 jako výrobce hracích karet.,Hry,2,evergreen
+AN-017,Twitter měl původně limit 280 znaků na příspěvek.,NE,"Začínal na 140 znacích, zdvojnásobil je až v roce 2017.",Sítě a appky,2,evergreen
+AN-018,Písmeno Ř se kromě češtiny běžně používá i v angličtině.,NE,Je to prakticky český unikát.,Česko,1,evergreen
+AN-019,"Banán je botanicky bobule, ale jahoda ne.",ANO,Jahoda je souplodí nažek.,Všeobecné,3,evergreen
+AN-020,Med se při správném skladování prakticky nikdy nezkazí.,ANO,Našel se poživatelný med starý tisíce let.,Jídlo a lifestyle,2,evergreen
+AN-021,"Chobotnice má jeden mozek, stejně jako člověk.",NE,Má jich devět — jeden centrální a jeden v každém chapadle.,Všeobecné,2,evergreen
+AN-022,Kapybara je největší hlodavec na světě.,ANO,Váží přes padesát kilo.,Všeobecné,1,evergreen
+AN-023,Člověk má při narození víc kostí než v dospělosti.,ANO,"Kolem tří set, část později sroste na 206.",Všeobecné,2,evergreen
+AN-024,Na Venuši trvá jeden den déle než jeden rok.,ANO,"Otočí se kolem osy pomaleji, než oběhne Slunce.",Všeobecné,3,evergreen
+AN-025,"Nepál má jako jediná země na světě vlajku, která není obdélníková.",ANO,Tvoří ji dva nad sebou položené trojúhelníky.,Všeobecné,2,evergreen
+AN-026,Hokejové puky se před zápasem zmrazují.,ANO,Zmrzlý puk míň skáče a lépe klouže.,Sport,2,evergreen
+AN-027,Každý fotbalový míč má přesně 32 panelů.,NE,"Klasický vzor je 32, moderní míče mají různé počty.",Sport,2,evergreen
+AN-028,Značky Adidas a Puma založili dva bratři.,ANO,"Adolf a Rudolf Dasslerovi, kteří se rozhádali.",Sport,2,evergreen
+AN-029,Czechia je oficiální jednoslovný anglický název Česka.,ANO,Používá se od roku 2016.,Česko,1,evergreen
+AN-030,Plzeň je třetí největší město Česka.,NE,"Je čtvrtá, za Prahou, Brnem a Ostravou.",Česko,2,evergreen
+AN-031,Televizní AZ-kvíz se natáčí v Brně.,ANO,Vyrábí ho brněnské studio České televize.,Česko,2,evergreen
+AN-032,Pražské metro má čtyři linky.,NE,"V provozu jsou tři, linka D se teprve staví.",Česko,1,evergreen
+AN-033,Maskotem Duolinga je zelený papoušek.,NE,Je to sova a jmenuje se Duo. Notifikace posílá stejně otravně.,Sítě a appky,1,evergreen
+AN-034,Uber začínal jako levná alternativa ke klasickým taxíkům.,NE,Naopak — nabízel jen černé luxusní limuzíny. Levnější UberX přišel až později.,Tech a AI,2,evergreen
