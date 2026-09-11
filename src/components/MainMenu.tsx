@@ -143,8 +143,8 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
           {questionsCount && (
             <p className="mt-3 text-center text-xs text-white/30">
               {variant === 'classic'
-                ? `28 otázek namíchaných z ${questionsCount}`
-                : `${questionsCount} otázek podle vybraných písmen`}
+                ? '28 náhodných otázek. Jeden vítěz.'
+                : '28 otázek podle písmen. Jeden vítěz.'}
             </p>
           )}
         </div>

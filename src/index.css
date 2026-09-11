@@ -46,14 +46,33 @@ html, body, #root {
 body {
   margin: 0;
   font-family: var(--font-body);
-  background:
-    radial-gradient(circle at 15% 0%, #3a1f66 0%, transparent 55%),
-    radial-gradient(circle at 100% 20%, #1f4a6e 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, #5c1a4a 0%, transparent 50%),
-    var(--color-ink);
+  background: var(--color-ink);
   color: #f4eefc;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+  position: relative;
+}
+
+/*
+ * The decorative gradient blobs live on a fixed, viewport-sized pseudo
+ * layer rather than directly on `body`'s background. `body` is only ever
+ * laid out at one viewport tall (html/body/#root are height:100%), so on
+ * any screen where page content is taller than that (e.g. the menu on a
+ * short/wide window), a background painted on `body` tiles — the radial
+ * gradients repeat and produce a hard seam at the 100vh mark. Anchoring
+ * them to `position: fixed; inset: 0` instead means they always cover
+ * exactly the viewport, once, with no tiling possible.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 15% 0%, #3a1f66 0%, transparent 55%),
+    radial-gradient(circle at 100% 20%, #1f4a6e 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, #5c1a4a 0%, transparent 50%);
+  pointer-events: none;
 }
 
 ::selection {
