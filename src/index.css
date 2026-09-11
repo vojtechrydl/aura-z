@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "Sora", system-ui, sans-serif;
+  --font-body: "Sora", system-ui, sans-serif;
+
+  --color-ink: #0b0518;
+  --color-ink-soft: #150c28;
+  --color-surface: #1a1030;
+  --color-surface-2: #241640;
+
+  --color-p1: #ff3d81;
+  --color-p1-soft: #ff9fc5;
+  --color-p2: #33e6c9;
+  --color-p2-soft: #a6fff0;
+
+  --color-void: #362259;
+  --color-void-soft: #4a2f78;
+  --color-gold: #ffd23f;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-pulse-ring: pulse-ring 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, currentColor 55%, transparent); }
+  100% { box-shadow: 0 0 0 14px color-mix(in oklab, currentColor 0%, transparent); }
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at 15% 0%, #3a1f66 0%, transparent 55%),
+    radial-gradient(circle at 100% 20%, #1f4a6e 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, #5c1a4a 0%, transparent 50%),
+    var(--color-ink);
+  color: #f4eefc;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* nicer scrollbars for question text on small screens */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-void-soft) transparent;
+}
