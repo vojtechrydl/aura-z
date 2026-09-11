@@ -166,6 +166,7 @@ export function GameScreen({
           inputValue={inputValue}
           onInputChange={setInputValue}
           onSubmitLetter={() => finishLetterAnswer(inputValue)}
+          onDontKnow={() => finishLetterAnswer('')}
           yesNoPick={yesNoPick}
           onPickYesNo={finishYesNo}
         />

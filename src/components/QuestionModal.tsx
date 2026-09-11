@@ -11,6 +11,7 @@ interface QuestionModalProps {
   inputValue: string
   onInputChange: (value: string) => void
   onSubmitLetter: () => void
+  onDontKnow: () => void
   yesNoPick: boolean | null
   onPickYesNo: (value: boolean) => void
 }
@@ -26,6 +27,7 @@ export function QuestionModal({
   inputValue,
   onInputChange,
   onSubmitLetter,
+  onDontKnow,
   yesNoPick,
   onPickYesNo,
 }: QuestionModalProps) {
@@ -67,6 +69,7 @@ export function QuestionModal({
               inputValue={inputValue}
               onInputChange={onInputChange}
               onSubmitLetter={onSubmitLetter}
+              onDontKnow={onDontKnow}
             />
           ) : (
             <YesNoQuestionBody
@@ -91,9 +94,10 @@ function LetterQuestionBody({
   inputValue,
   onInputChange,
   onSubmitLetter,
+  onDontKnow,
 }: Pick<
   QuestionModalProps,
-  'isAI' | 'revealed' | 'revealCorrect' | 'inputValue' | 'onInputChange' | 'onSubmitLetter'
+  'isAI' | 'revealed' | 'revealCorrect' | 'inputValue' | 'onInputChange' | 'onSubmitLetter' | 'onDontKnow'
 > & { active: Extract<ActiveQuestion, { kind: 'letter' }> }) {
   const q = active.question
   const borderClass = !revealed
@@ -119,30 +123,40 @@ function LetterQuestionBody({
             {revealed ? (revealCorrect ? q.answer : 'AI nevěděla…') : '…'}
           </div>
         ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              onSubmitLetter()
-            }}
-            className="flex gap-2.5"
-          >
-            <input
-              type="text"
-              autoFocus
-              disabled={revealed}
-              value={inputValue}
-              onChange={(e) => onInputChange(e.target.value)}
-              placeholder={`Odpověď na písmeno ${q.letter}…`}
-              className={`w-full rounded-2xl border px-4 py-3 text-base font-medium text-white placeholder-white/30 outline-none transition-colors ${borderClass}`}
-            />
-            <button
-              type="submit"
-              disabled={revealed || !inputValue.trim()}
-              className="shrink-0 rounded-2xl bg-white/10 px-5 py-3 text-sm font-bold font-display text-white transition-colors hover:bg-white/20 disabled:opacity-30"
+          <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                onSubmitLetter()
+              }}
+              className="flex gap-2.5"
             >
-              OK
+              <input
+                type="text"
+                autoFocus
+                disabled={revealed}
+                value={inputValue}
+                onChange={(e) => onInputChange(e.target.value)}
+                placeholder={`Odpověď na písmeno ${q.letter}…`}
+                className={`w-full rounded-2xl border px-4 py-3 text-base font-medium text-white placeholder-white/30 outline-none transition-colors ${borderClass}`}
+              />
+              <button
+                type="submit"
+                disabled={revealed || !inputValue.trim()}
+                className="shrink-0 rounded-2xl bg-white/10 px-5 py-3 text-sm font-bold font-display text-white transition-colors hover:bg-white/20 disabled:opacity-30"
+              >
+                OK
+              </button>
+            </form>
+            <button
+              type="button"
+              disabled={revealed}
+              onClick={onDontKnow}
+              className="mt-2.5 w-full rounded-2xl border border-white/5 bg-transparent px-4 py-2 text-xs font-bold font-display text-white/40 transition-colors hover:bg-white/5 hover:text-white/70 disabled:opacity-30"
+            >
+              Nevím…
             </button>
-          </form>
+          </>
         )}
       </div>
 
