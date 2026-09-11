@@ -18,6 +18,17 @@
   --color-void-soft: #4a2f78;
   --color-gold: #ffd23f;
 
+  /* Fixed dark text for use ON TOP of bright accent fills (gold/p1/p2
+     badges, gradient buttons) — stays constant across themes, unlike
+     --color-ink which is the page background and flips per theme. */
+  --color-onaccent: #0b0518;
+  /* A version of gold meant to be read as small TEXT on the page/card
+     background (logo accent, category labels) rather than as a fill —
+     needs to darken in light mode for contrast; --color-gold itself stays
+     bright in both themes since it's always paired with dark text when
+     used as a fill. */
+  --color-gold-fg: #ffd23f;
+
   --animate-float: float 6s ease-in-out infinite;
   --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   --animate-pulse-ring: pulse-ring 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -39,6 +50,65 @@
   100% { box-shadow: 0 0 0 14px color-mix(in oklab, currentColor 0%, transparent); }
 }
 
+/*
+ * Raw hex-board colors (SVG fill/stroke attributes, not Tailwind utility
+ * classes) that also need to flip per theme. Defined as plain CSS custom
+ * properties, referenced as var(--hex-*) directly in HexBoard.tsx.
+ */
+:root {
+  --hex-empty-grad-1: #2a1c48;
+  --hex-empty-grad-2: #1e1436;
+  --hex-stroke: #3a2b5c;
+  --hex-stroke-pending: #ffffff;
+  --hex-text-empty: #d9c9ff;
+  --hex-text-gray: #8a7fa8;
+  --hex-fill-gray: #4b4160;
+  --hex-side-label: #a893d6;
+  --blob-1: #3a1f66;
+  --blob-2: #1f4a6e;
+  --blob-3: #5c1a4a;
+}
+
+/*
+ * Light theme. Two kinds of overrides live here:
+ *  1. Our own --color-* tokens registered above under @theme.
+ *  2. Tailwind's OWN built-in palette variables (--color-white, and the
+ *     emerald/rose stops used for correct/wrong feedback). Tailwind v4
+ *     exposes its entire default palette as overridable CSS variables, so
+ *     redefining --color-white here is enough to flip every text-white/40,
+ *     border-white/10, bg-white/5, placeholder-white/30 etc. across the
+ *     whole app to a readable dark foreground — without touching a single
+ *     component. --color-black is left alone: modal backdrops should stay
+ *     a dark scrim in both themes.
+ */
+:root[data-theme="light"] {
+  --color-ink: #f5f0fc;
+  --color-ink-soft: #ece0fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1e9fb;
+  --color-void: #cbb8ec;
+  --color-void-soft: #d8cdf0;
+  --color-gold-fg: #a66c00;
+
+  --color-white: #211433;
+  --color-emerald-200: oklch(59.6% 0.145 163.225);
+  --color-emerald-300: oklch(50.8% 0.118 165.612);
+  --color-rose-200: oklch(58.6% 0.253 17.585);
+  --color-rose-300: oklch(51.4% 0.222 16.935);
+
+  --hex-empty-grad-1: #f2ecfc;
+  --hex-empty-grad-2: #e6d9f8;
+  --hex-stroke: #d9cdf0;
+  --hex-stroke-pending: #241640;
+  --hex-text-empty: #4a3a75;
+  --hex-text-gray: #9086ab;
+  --hex-fill-gray: #d8d1e8;
+  --hex-side-label: #7c6a9e;
+  --blob-1: #dcc8ff;
+  --blob-2: #c3e8ff;
+  --blob-3: #ffd3ec;
+}
+
 html, body, #root {
   height: 100%;
 }
@@ -47,10 +117,11 @@ body {
   margin: 0;
   font-family: var(--font-body);
   background: var(--color-ink);
-  color: #f4eefc;
+  color: var(--color-white);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /*
@@ -69,15 +140,21 @@ body::before {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 15% 0%, #3a1f66 0%, transparent 55%),
-    radial-gradient(circle at 100% 20%, #1f4a6e 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, #5c1a4a 0%, transparent 50%);
+    radial-gradient(circle at 15% 0%, var(--blob-1) 0%, transparent 55%),
+    radial-gradient(circle at 100% 20%, var(--blob-2) 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, var(--blob-3) 0%, transparent 50%);
+  opacity: var(--blob-opacity, 1);
   pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+:root[data-theme="light"] body::before {
+  --blob-opacity: 0.55;
 }
 
 ::selection {
   background: var(--color-gold);
-  color: var(--color-ink);
+  color: var(--color-onaccent);
 }
 
 .font-display {

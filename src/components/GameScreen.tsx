@@ -7,6 +7,7 @@ import { ResultToast } from './ResultToast'
 import { useGame } from '../game/useGame'
 import { isAnswerAccepted } from '../game/normalize'
 import { aiPickYesNo, aiWillAnswerLetter, aiWillAnswerYesNo, pickHexForAI } from '../game/ai'
+import { playClick, playCorrect, playWin, playWrong } from '../game/sounds'
 import type { BoardVariant, GameMode, LetterQuestion, YesNoQuestion } from '../game/types'
 
 const TIME_LIMIT = 18
@@ -72,6 +73,7 @@ export function GameScreen({
     setInputValue(text)
     setRevealed(true)
     setRevealCorrect(correct)
+    correct ? playCorrect() : playWrong()
     const t = window.setTimeout(() => submitLetterAnswer(text), 1400)
     timers.current.push(t)
   }
@@ -79,9 +81,11 @@ export function GameScreen({
   const finishYesNo = (picked: boolean) => {
     if (!state.activeQuestion || state.activeQuestion.kind !== 'yesno') return
     const q = state.activeQuestion.question
+    const correct = picked === q.correct
     setYesNoPick(picked)
     setRevealed(true)
-    setRevealCorrect(picked === q.correct)
+    setRevealCorrect(correct)
+    correct ? playCorrect() : playWrong()
     const t = window.setTimeout(() => submitYesNo(picked), 1600)
     timers.current.push(t)
   }
@@ -135,6 +139,12 @@ export function GameScreen({
 
   useEffect(() => clearTimers, [])
 
+  // fires exactly once, right when a null->playerId transition happens
+  useEffect(() => {
+    if (state.winner) playWin()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.winner])
+
   const boardInteractive =
     !state.activeQuestion && !state.winner && !state.players[state.currentPlayer].isAI
 
@@ -146,7 +156,11 @@ export function GameScreen({
         <HexBoard
           state={state}
           variant={variant}
-          onSelect={(hexId) => boardInteractive && openQuestion(hexId)}
+          onSelect={(hexId) => {
+            if (!boardInteractive) return
+            playClick()
+            openQuestion(hexId)
+          }}
           interactive={boardInteractive}
           pendingHexId={state.activeQuestion?.hexId ?? null}
         />

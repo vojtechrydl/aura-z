@@ -55,7 +55,7 @@ export function QuestionModal({
           </div>
 
           {category && (
-            <span className="text-[11px] uppercase tracking-widest text-gold font-bold font-display">
+            <span className="text-[11px] uppercase tracking-widest text-gold-fg font-bold font-display">
               {category}
             </span>
           )}
@@ -109,7 +109,7 @@ function LetterQuestionBody({
   return (
     <>
       <div className="mt-1 flex items-start gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold text-lg font-extrabold font-display text-ink">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold text-lg font-extrabold font-display text-onaccent">
           {q.letter}
         </span>
         <h2 className="mt-1 text-lg sm:text-xl font-display font-bold leading-snug text-white">

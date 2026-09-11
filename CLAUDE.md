@@ -22,6 +22,9 @@ co README nepokrývá.
   na písmeno) a **Finále** (písmena jako ve skutečném pořadu, otázka se
   vybírá podle písmena pole až při kliknutí). Viz `src/game/types.ts`
   (`BoardVariant`) a `src/game/letters.ts`.
+- Světlý motiv a zvukové efekty jsou hotové (viz README → Vzhled a zvuk).
+  Zvuky jsou syntetizované za běhu (Web Audio API), žádné audio soubory
+  v repu ani k nahrávání.
 
 ## Jak pracovat na tomto repu
 
@@ -37,7 +40,23 @@ co README nepokrývá.
 - Tailwind v4: barvy/animace definované v `@theme` bloku v
   [src/index.css](src/index.css) (`--color-p1`, `--color-gold`, ...) se
   používají jako běžné utility třídy bez `color-` prefixu, např. `bg-p1`,
-  `text-gold`, `animate-float` — ne `bg-(--color-p1)`.
+  `bg-gold`, `animate-float` — ne `bg-(--color-p1)`.
+- **Světlý/tmavý motiv je čistě CSS, žádné props drilling.** `useTheme.ts`
+  jen přepíná `data-theme` na `<html>`; `[data-theme="light"]` v
+  `index.css` přepisuje hodnoty CSS proměnných — včetně Tailwindích
+  vestavěných (`--color-white`, `--color-emerald-200/300`,
+  `--color-rose-200/300`), takže `text-white/40`, `border-white/10` apod.
+  fungují napříč celou appkou bez úprav komponent. Dvě věci, na které si
+  dát pozor při dalších úpravách:
+  - `--color-ink` = barva pozadí stránky (mění se podle motivu). Pro
+    "tmavý text na jasné ploše" (odznaky, gradientové tlačítko) použij
+    `text-onaccent` — je to **fixní** konstanta, nezávislá na motivu
+    (na rozdíl od `--color-ink` by se jinak ve světlém režimu stal bílým
+    textem na jasném pozadí = nečitelné).
+  - `--color-gold` (pozadí/fill) vs. `--color-gold-fg` (text) — gold jako
+    plocha zůstává stejně jasný v obou motivech, ale gold jako TEXT na
+    stránce/kartě potřebuje ve světlém režimu ztmavit kvůli kontrastu.
+    Použij `bg-gold`/`border-gold` pro plochy, `text-gold-fg` pro text.
 
 ## Architektura (stručně)
 

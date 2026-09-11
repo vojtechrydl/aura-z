@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { MainMenu } from './components/MainMenu'
 import { GameScreen } from './components/GameScreen'
 import { useQuestions } from './game/useQuestions'
+import { useTheme } from './useTheme'
 import type { BoardVariant, GameMode } from './game/types'
 
 interface Session {
@@ -15,6 +16,7 @@ interface Session {
 export default function App() {
   const { letterQuestions, yesNoQuestions, error } = useQuestions()
   const [session, setSession] = useState<Session | null>(null)
+  const [theme, setTheme] = useTheme()
   const ready = !!letterQuestions && !!yesNoQuestions
 
   if (!session) {
@@ -23,6 +25,8 @@ export default function App() {
         onStart={(mode, variant, p1, p2) => setSession({ mode, variant, p1, p2, key: Date.now() })}
         questionsError={error}
         questionsCount={ready ? letterQuestions!.length : null}
+        theme={theme}
+        onThemeChange={setTheme}
       />
     )
   }

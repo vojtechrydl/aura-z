@@ -52,7 +52,7 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
   const fillFor = (cellState: CellState) => {
     if (cellState === 1) return 'var(--color-p1)'
     if (cellState === 2) return 'var(--color-p2)'
-    if (cellState === 'gray') return '#4b4160'
+    if (cellState === 'gray') return 'var(--hex-fill-gray)'
     return 'url(#hexEmpty)'
   }
 
@@ -70,8 +70,8 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
     >
       <defs>
         <linearGradient id="hexEmpty" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#2a1c48" />
-          <stop offset="100%" stopColor="#1e1436" />
+          <stop offset="0%" stopColor="var(--hex-empty-grad-1)" />
+          <stop offset="100%" stopColor="var(--hex-empty-grad-2)" />
         </linearGradient>
         <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur stdDeviation="6" result="blur" />
@@ -86,7 +86,7 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
       <text
         x={bounds.minX - 14}
         y={midY}
-        fill="#a893d6"
+        fill="var(--hex-side-label)"
         fontSize="13"
         fontWeight={700}
         letterSpacing="0.12em"
@@ -98,7 +98,7 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
       <text
         x={bounds.maxX + 14}
         y={midY}
-        fill="#a893d6"
+        fill="var(--hex-side-label)"
         fontSize="13"
         fontWeight={700}
         letterSpacing="0.12em"
@@ -111,7 +111,7 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
       <text
         x={midX}
         y={bounds.maxY + 34}
-        fill="#a893d6"
+        fill="var(--hex-side-label)"
         fontSize="13"
         fontWeight={700}
         letterSpacing="0.12em"
@@ -140,7 +140,7 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
             <polygon
               points={polygonPoints}
               fill={fillFor(cellState)}
-              stroke={isWinning ? 'var(--color-gold)' : isPending ? '#fff' : '#3a2b5c'}
+              stroke={isWinning ? 'var(--color-gold)' : isPending ? 'var(--hex-stroke-pending)' : 'var(--hex-stroke)'}
               strokeWidth={isWinning || isPending ? 3.5 : 1.5}
               filter={isWinning || isPending ? 'url(#glow)' : undefined}
               className={[
@@ -155,7 +155,7 @@ export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }
               dominantBaseline="central"
               fontSize={label?.length > 1 ? 16 : 20}
               fontWeight={800}
-              fill={cellState === 1 || cellState === 2 ? '#0b0518' : cellState === 'gray' ? '#8a7fa8' : '#d9c9ff'}
+              fill={cellState === 1 || cellState === 2 ? 'var(--color-onaccent)' : cellState === 'gray' ? 'var(--hex-text-gray)' : 'var(--hex-text-empty)'}
               className="font-display pointer-events-none"
             >
               {label}

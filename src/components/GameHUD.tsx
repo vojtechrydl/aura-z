@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { isSoundEnabled, setSoundEnabled } from '../game/sounds'
 import type { GameState, PlayerId } from '../game/types'
 
 interface GameHUDProps {
@@ -10,8 +12,10 @@ function countCells(state: GameState, player: PlayerId) {
 }
 
 export function GameHUD({ state, onExit }: GameHUDProps) {
+  const [soundOn, setSoundOn] = useState(isSoundEnabled)
+
   return (
-    <div className="flex w-full max-w-[620px] items-center justify-between gap-3">
+    <div className="flex w-full max-w-[620px] items-center justify-between gap-2 sm:gap-3">
       {([1, 2] as PlayerId[]).map((id) => {
         const p = state.players[id]
         const active = state.currentPlayer === id && !state.winner
@@ -36,6 +40,18 @@ export function GameHUD({ state, onExit }: GameHUDProps) {
           </div>
         )
       })}
+      <button
+        type="button"
+        onClick={() => {
+          const next = !soundOn
+          setSoundOn(next)
+          setSoundEnabled(next)
+        }}
+        aria-label={soundOn ? 'Vypnout zvuk' : 'Zapnout zvuk'}
+        className="shrink-0 rounded-xl border border-white/10 bg-white/5 px-2.5 py-2.5 text-sm hover:bg-white/10 transition-colors"
+      >
+        {soundOn ? '🔊' : '🔇'}
+      </button>
       <button
         type="button"
         onClick={onExit}

@@ -65,6 +65,20 @@ diakritiku a interpunkci, navíc se uznávají i varianty ze sloupce
 - **Vyhrává hráč, jehož souvislá skupina políček stejné barvy spojí
   všechny tři strany trojúhelníku** (Levá / Pravá / Spodní).
 
+## Vzhled a zvuk
+
+- **Tmavý/světlý motiv** — přepínač (☀️/🌙) v pravém horním rohu hlavního
+  menu. Volba se ukládá do `localStorage` a platí pro celou appku (i během
+  hry), dokud ji hráč nezmění. Implementace: [src/useTheme.ts](src/useTheme.ts)
+  nastavuje `data-theme` na `<html>`, veškeré barvy jsou v
+  [src/index.css](src/index.css) vyjádřené přes CSS proměnné (včetně
+  Tailwindích vestavěných `--color-white`/`--color-emerald-*`/`--color-rose-*`),
+  takže žádná komponenta nemá motiv natvrdo zadrátovaný.
+- **Zvukové efekty** — krátké tóny generované za běhu přes Web Audio API
+  ([src/game/sounds.ts](src/game/sounds.ts)), žádné externí zvukové soubory.
+  Správná/špatná odpověď, start hry, výhra, klik na pole. Ztlumit jde
+  ikonou 🔊/🔇 v herním HUD (uloží se do `localStorage`).
+
 ## Formát otázek
 
 Dva CSV soubory v `public/`, oba se načítají za běhu — chceš-li nahradit
@@ -124,7 +138,9 @@ src/
     useGame.ts             # herní stav (cells, cellLetters, activeQuestion…)
     useQuestions.ts          # načtení + parsování obou CSV
     ai.ts                     # AI protihráč (výběr pole, přesnost, ANO/NE)
+    sounds.ts                  # syntetizované zvukové efekty (Web Audio API)
   components/        # UI (deska, menu, otázka, HUD, výhra…)
+  useTheme.ts          # tmavý/světlý motiv (localStorage + data-theme na <html>)
 public/
   questions-letters.csv   # hlavní banka otázek (na písmeno)
   questions-yesno.csv      # dotahy na šedá pole (ANO/NE)

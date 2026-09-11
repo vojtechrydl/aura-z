@@ -1,13 +1,23 @@
 import { useState } from 'react'
+import { playGameStart } from '../game/sounds'
 import type { BoardVariant, GameMode } from '../game/types'
+import type { Theme } from '../useTheme'
 
 interface MainMenuProps {
   onStart: (mode: GameMode, variant: BoardVariant, p1: string, p2: string) => void
   questionsError: string | null
   questionsCount: number | null
+  theme: Theme
+  onThemeChange: (theme: Theme) => void
 }
 
-export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuProps) {
+export function MainMenu({
+  onStart,
+  questionsError,
+  questionsCount,
+  theme,
+  onThemeChange,
+}: MainMenuProps) {
   const [mode, setMode] = useState<GameMode>('local')
   const [variant, setVariant] = useState<BoardVariant>('classic')
   const [p1, setP1] = useState('Hráč 1')
@@ -15,6 +25,15 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
 
   return (
     <div className="flex min-h-dvh w-full flex-col items-center justify-center px-5 py-10">
+      <button
+        type="button"
+        onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
+        aria-label={theme === 'dark' ? 'Přepnout na světlý motiv' : 'Přepnout na tmavý motiv'}
+        className="fixed right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-base backdrop-blur transition-colors hover:bg-white/10"
+      >
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 h-16 w-16 animate-float">
@@ -34,7 +53,7 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
             </svg>
           </div>
           <h1 className="font-display text-4xl font-extrabold tracking-tight text-white">
-            Aura<span className="text-gold">Z</span>
+            Aura<span className="text-gold-fg">Z</span>
           </h1>
           <p className="mt-1.5 text-sm text-white/50">
             Spoj všechny tři strany trojúhelníku dřív než soupeř.
@@ -129,10 +148,11 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
           <button
             type="button"
             disabled={!questionsCount}
-            onClick={() =>
+            onClick={() => {
+              playGameStart()
               onStart(mode, variant, p1.trim() || 'Hráč 1', mode === 'ai' ? 'AI' : p2.trim() || 'Hráč 2')
-            }
-            className="mt-1.5 w-full rounded-2xl bg-gradient-to-r from-p1 to-gold px-5 py-3.5 text-sm font-extrabold font-display text-ink transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
+            }}
+            className="mt-1.5 w-full rounded-2xl bg-gradient-to-r from-p1 to-gold px-5 py-3.5 text-sm font-extrabold font-display text-onaccent transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
           >
             {questionsCount ? 'Spustit hru' : 'Načítám otázky…'}
           </button>

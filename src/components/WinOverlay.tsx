@@ -33,7 +33,7 @@ export function WinOverlay({ winner, onRematch, onMenu }: WinOverlayProps) {
             <button
               type="button"
               onClick={onRematch}
-              className="rounded-2xl px-5 py-3 text-sm font-bold font-display text-ink transition-transform hover:scale-[1.02] active:scale-95"
+              className="rounded-2xl px-5 py-3 text-sm font-bold font-display text-onaccent transition-transform hover:scale-[1.02] active:scale-95"
               style={{ backgroundColor: winner.color }}
             >
               Odveta
