@@ -40,19 +40,26 @@ npm start           # spustí Express server nad dist/ (co poběží na Railway)
 
 ## Herní mechanika
 
-Board má 28 polí. Na začátku hry se každému poli náhodně přidělí jedno
-písmeno abecedy (z těch, pro která existují otázky) — přesně jako na
-skutečné hrací ploše AZ-kvízu.
+Board má 28 polí. Na výběr jsou dva módy desky:
 
-- **Klikneš na volné (bílé) pole** → dostaneš otázku vázanou na jeho písmeno
-  a **napíšeš odpověď** (žádné ABCD — psaný text jako ve skutečném pořadu).
-  Odpověď se porovná bez ohledu na velikost písmen, diakritiku a interpunkci,
-  navíc se uznávají i varianty ze sloupce `alt_odpovedi`.
+- **Classic** — pole jsou očíslovaná 1–28. Na začátku hry se pro každé pole
+  náhodně vylosuje jedna otázka z celé banky (bez vazby na písmeno) — čistá
+  loterie, větší rozptyl.
+- **Finále** — pole mají přidělené písmeno (z abecedy, pro kterou existují
+  otázky), přesně jako na skutečné hrací ploše AZ-kvízu. Otázka se vybere
+  podle písmena pole až ve chvíli, kdy se na něj klikne.
+
+V obou módech se **odpovídá psaním** (žádné ABCD — volný text jako ve
+skutečném pořadu). Odpověď se porovná bez ohledu na velikost písmen,
+diakritiku a interpunkci, navíc se uznávají i varianty ze sloupce
+`alt_odpovedi`.
+
+- **Klikneš na volné (bílé) pole** → dostaneš jeho otázku a napíšeš odpověď.
   - Správně → pole se zabarví barvou hráče.
   - Špatně / vypršel čas → pole **zešedne** a je znovu volné.
 - **Klikneš na šedé pole** → tentokrát dostaneš **otázku ANO/NE** z druhé
-  sady (šedé pole už nemá "svoje" písmeno — ptáme se jinak, aby otázka
-  nebyla stejná jako napoprvé). Správně → pole se zabarví; špatně → zůstává
+  sady (v obou módech stejně — druhý pokus se ptá jinak, aby to nebyla
+  stejná otázka jako napoprvé). Správně → pole se zabarví; špatně → zůstává
   šedé a je pořád volné.
 - Tah se vždy střídá, bez ohledu na výsledek.
 - **Vyhrává hráč, jehož souvislá skupina políček stejné barvy spojí
@@ -81,8 +88,9 @@ AZ-001,A,"Jak se slangově říká vyzařování a charismatu?",Aura,auru,Slang,
 - `trvanlivost` — `evergreen` / `sezónní`, jen metadata pro budoucí filtrování
   (dnes se nepoužívá v herní logice).
 
-Potřeba je **aspoň tolik různých písmen, kolik chceš mít na desce (28)** —
-při méně unikátních písmenech se některá zopakují na víc polích.
+V módu Finále je potřeba **aspoň tolik různých písmen, kolik chceš mít na
+desce (28)** — při méně unikátních písmenech se některá zopakují na víc
+polích. V módu Classic stačí, aby bylo v souboru aspoň 28 otázek celkem.
 
 ### `public/questions-yesno.csv` — dotahy na šedá pole
 
@@ -110,7 +118,7 @@ src/
   game/
     board.ts        # deska, sousednost hexů, výherní podmínka (BFS, 3 strany)
     geometry.ts      # pixelové souřadnice hexů (SVG)
-    letters.ts        # přiřazení písmen polím na začátku hry
+    letters.ts        # přiřazení písmen/otázek polím na začátku hry (Finále/Classic)
     normalize.ts       # porovnávání psaných odpovědí (diakritika, varianty)
     types.ts             # sdílené typy
     useGame.ts             # herní stav (cells, cellLetters, activeQuestion…)

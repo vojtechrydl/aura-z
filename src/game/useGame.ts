@@ -1,8 +1,9 @@
 import { useCallback, useRef, useState } from 'react'
 import { CELLS, checkWin } from './board'
-import { assignCellLetters } from './letters'
+import { assignCellLetters, assignCellQuestions } from './letters'
 import { isAnswerAccepted } from './normalize'
 import type {
+  BoardVariant,
   CellState,
   GameMode,
   GameState,
@@ -38,14 +39,18 @@ function makePlayers(mode: GameMode, p1Name: string, p2Name: string): Record<Pla
 
 export function makeInitialState(
   mode: GameMode,
+  variant: BoardVariant,
   player1Name: string,
   player2Name: string,
-  availableLetters: string[],
+  letterQuestions: LetterQuestion[],
 ): GameState {
+  const isClassic = variant === 'classic'
   return {
     mode,
+    variant,
     cells: makeInitialCells(),
-    cellLetters: assignCellLetters(availableLetters),
+    cellLetters: isClassic ? {} : assignCellLetters(Array.from(new Set(letterQuestions.map((q) => q.letter)))),
+    cellQuestions: isClassic ? assignCellQuestions(letterQuestions) : {},
     currentPlayer: 1,
     players: makePlayers(mode, player1Name, player2Name),
     activeQuestion: null,
@@ -58,14 +63,14 @@ export function makeInitialState(
 
 export function useGame(
   mode: GameMode,
+  variant: BoardVariant,
   player1Name: string,
   player2Name: string,
   letterQuestions: LetterQuestion[],
   yesNoQuestions: YesNoQuestion[],
 ) {
-  const availableLetters = useRef(Array.from(new Set(letterQuestions.map((q) => q.letter))))
   const [state, setState] = useState<GameState>(() =>
-    makeInitialState(mode, player1Name, player2Name, availableLetters.current),
+    makeInitialState(mode, variant, player1Name, player2Name, letterQuestions),
   )
   const usedIdsRef = useRef(new Set<string>())
 
@@ -104,8 +109,10 @@ export function useGame(
             lastResult: null,
           }
         }
-        const letter = s.cellLetters[hexId]
-        const question = pickLetterQuestion(letter)
+
+        const question =
+          s.variant === 'classic' ? s.cellQuestions[hexId] : pickLetterQuestion(s.cellLetters[hexId])
+        usedIdsRef.current.add(question.id)
         return {
           ...s,
           activeQuestion: { kind: 'letter', hexId, forPlayer: s.currentPlayer, question },
@@ -175,11 +182,11 @@ export function useGame(
   )
 
   const reset = useCallback(
-    (newMode: GameMode, p1: string, p2: string) => {
+    (newMode: GameMode, newVariant: BoardVariant, p1: string, p2: string) => {
       usedIdsRef.current = new Set()
-      setState(makeInitialState(newMode, p1, p2, availableLetters.current))
+      setState(makeInitialState(newMode, newVariant, p1, p2, letterQuestions))
     },
-    [],
+    [letterQuestions],
   )
 
   return { state, openQuestion, submitLetterAnswer, submitYesNo, reset }

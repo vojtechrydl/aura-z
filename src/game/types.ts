@@ -6,6 +6,14 @@ export type Side = 'left' | 'right' | 'bottom'
 
 export type GameMode = 'local' | 'ai'
 
+/**
+ * Classic: numbered tiles, one question randomly pre-drawn per tile at game
+ * start (no letter tie-in — pure lottery, like the show's classic board).
+ * Finále: lettered tiles, question drawn to match the tile's letter when
+ * it's opened (the real AZ-kvíz mechanic).
+ */
+export type BoardVariant = 'classic' | 'finale'
+
 export interface PlayerConfig {
   id: PlayerId
   name: string
@@ -41,9 +49,12 @@ export type ActiveQuestion =
 
 export interface GameState {
   mode: GameMode
+  variant: BoardVariant
   cells: Record<number, CellState>
-  /** Letter assigned to each hex at game start; used for the first (letter) attempt. */
+  /** Finále only: letter assigned to each hex at game start, shown on the tile. */
   cellLetters: Record<number, string>
+  /** Classic only: the one question pre-drawn for each hex at game start. */
+  cellQuestions: Record<number, LetterQuestion>
   currentPlayer: PlayerId
   players: Record<PlayerId, PlayerConfig>
   activeQuestion: ActiveQuestion | null

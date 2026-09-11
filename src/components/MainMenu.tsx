@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import type { GameMode } from '../game/types'
+import type { BoardVariant, GameMode } from '../game/types'
 
 interface MainMenuProps {
-  onStart: (mode: GameMode, p1: string, p2: string) => void
+  onStart: (mode: GameMode, variant: BoardVariant, p1: string, p2: string) => void
   questionsError: string | null
   questionsCount: number | null
 }
 
 export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuProps) {
   const [mode, setMode] = useState<GameMode>('local')
+  const [variant, setVariant] = useState<BoardVariant>('classic')
   const [p1, setP1] = useState('Hráč 1')
   const [p2, setP2] = useState('Hráč 2')
 
@@ -71,6 +72,36 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
             </button>
           </div>
 
+          <p className="mb-2.5 text-xs font-bold uppercase tracking-wider text-white/40 font-display">
+            Mód desky
+          </p>
+          <div className="grid grid-cols-2 gap-2.5 mb-5">
+            <button
+              type="button"
+              onClick={() => setVariant('classic')}
+              className={`rounded-2xl border px-4 py-3.5 text-left text-sm font-bold font-display transition-all ${
+                variant === 'classic'
+                  ? 'border-gold bg-gold/15 text-white'
+                  : 'border-white/10 bg-white/[0.02] text-white/50 hover:bg-white/5'
+              }`}
+            >
+              🔢 Classic
+              <div className="mt-1 text-xs font-normal text-white/40">Čísla, otázky namíchané předem</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setVariant('finale')}
+              className={`rounded-2xl border px-4 py-3.5 text-left text-sm font-bold font-display transition-all ${
+                variant === 'finale'
+                  ? 'border-gold bg-gold/15 text-white'
+                  : 'border-white/10 bg-white/[0.02] text-white/50 hover:bg-white/5'
+              }`}
+            >
+              🔤 Finále
+              <div className="mt-1 text-xs font-normal text-white/40">Písmena, jako v televizi</div>
+            </button>
+          </div>
+
           <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-white/40 font-display">
             {mode === 'ai' ? 'Tvoje jméno' : 'Jméno hráče 1'}
           </label>
@@ -98,7 +129,9 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
           <button
             type="button"
             disabled={!questionsCount}
-            onClick={() => onStart(mode, p1.trim() || 'Hráč 1', mode === 'ai' ? 'AI' : p2.trim() || 'Hráč 2')}
+            onClick={() =>
+              onStart(mode, variant, p1.trim() || 'Hráč 1', mode === 'ai' ? 'AI' : p2.trim() || 'Hráč 2')
+            }
             className="mt-1.5 w-full rounded-2xl bg-gradient-to-r from-p1 to-gold px-5 py-3.5 text-sm font-extrabold font-display text-ink transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
           >
             {questionsCount ? 'Spustit hru' : 'Načítám otázky…'}
@@ -109,14 +142,17 @@ export function MainMenu({ onStart, questionsError, questionsCount }: MainMenuPr
           )}
           {questionsCount && (
             <p className="mt-3 text-center text-xs text-white/30">
-              {questionsCount} otázek na písmena · napiš odpověď, žádné ABCD
+              {questionsCount} otázek podle vybraných písmen
             </p>
           )}
         </div>
 
         <p className="mt-6 text-center text-xs text-white/25">
-          Klikni na pole, napiš odpověď na jeho písmeno. Šedá pole se ptají
-          ANO/NE. Vyhraješ, když svou barvou spojíš všechny tři strany.
+          {variant === 'classic'
+            ? 'Klikni na pole a napiš odpověď na jeho otázku.'
+            : 'Klikni na pole a napiš odpověď na jeho písmeno.'}{' '}
+          Šedá pole se ptají ANO/NE. Vyhraješ, když svou barvou spojíš
+          všechny tři strany.
         </p>
       </div>
     </div>

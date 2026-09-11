@@ -17,6 +17,11 @@ co README nepokrývá.
 - Herní pravidlo: vyhrává hráč, který svou barvou spojí **všechny tři**
   strany trojúhelníku (ne dvě — to byla chyba v původním zadání, opravená
   po zpětné vazbě).
+- Dva volitelné módy desky (vybírají se v menu): **Classic** (čísla 1–28,
+  otázka na pole vylosovaná náhodně z celé banky při startu hry, bez vazby
+  na písmeno) a **Finále** (písmena jako ve skutečném pořadu, otázka se
+  vybírá podle písmena pole až při kliknutí). Viz `src/game/types.ts`
+  (`BoardVariant`) a `src/game/letters.ts`.
 
 ## Jak pracovat na tomto repu
 

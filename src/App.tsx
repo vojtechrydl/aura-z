@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { MainMenu } from './components/MainMenu'
 import { GameScreen } from './components/GameScreen'
 import { useQuestions } from './game/useQuestions'
-import type { GameMode } from './game/types'
+import type { BoardVariant, GameMode } from './game/types'
 
 interface Session {
   mode: GameMode
+  variant: BoardVariant
   p1: string
   p2: string
   key: number
@@ -19,7 +20,7 @@ export default function App() {
   if (!session) {
     return (
       <MainMenu
-        onStart={(mode, p1, p2) => setSession({ mode, p1, p2, key: Date.now() })}
+        onStart={(mode, variant, p1, p2) => setSession({ mode, variant, p1, p2, key: Date.now() })}
         questionsError={error}
         questionsCount={ready ? letterQuestions!.length : null}
       />
@@ -30,6 +31,7 @@ export default function App() {
     <GameScreen
       key={session.key}
       mode={session.mode}
+      variant={session.variant}
       p1Name={session.p1}
       p2Name={session.p2}
       letterQuestions={letterQuestions ?? []}

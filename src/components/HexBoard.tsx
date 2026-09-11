@@ -1,26 +1,51 @@
 import { useMemo } from 'react'
 import { CELLS } from '../game/board'
 import { makeLayout } from '../game/geometry'
-import type { CellState, GameState } from '../game/types'
+import type { BoardVariant, CellState, GameState } from '../game/types'
 
 interface HexBoardProps {
   state: GameState
+  variant: BoardVariant
   onSelect: (hexId: number) => void
   interactive: boolean
   pendingHexId: number | null
 }
 
 const SIZE = 52
-const PADDING = 64
+// Margin budget around the tight hex bounding box: side labels need extra
+// horizontal room to sit outside the board, the bottom label needs extra
+// vertical room, everything else just needs enough for the glow/stroke bleed.
+const MARGIN_X = 46
+const MARGIN_TOP = 16
+const MARGIN_BOTTOM = 50
 
-export function HexBoard({ state, onSelect, interactive, pendingHexId }: HexBoardProps) {
+export function HexBoard({ state, variant, onSelect, interactive, pendingHexId }: HexBoardProps) {
   const layout = useMemo(() => makeLayout(SIZE), [])
-  const { positions, totalWidth, totalHeight, polygonPoints } = layout
+  const { positions, width, polygonPoints } = layout
 
-  const viewBoxW = totalWidth + PADDING * 2
-  const viewBoxH = totalHeight + PADDING * 2 + 34
-  const offsetX = viewBoxW / 2
-  const offsetY = PADDING + SIZE
+  // Tight bounding box around every hex's actual vertices (not just centers),
+  // so nothing — like the single hex on row 1 — ever clips against the edge.
+  const bounds = useMemo(() => {
+    let minX = Infinity
+    let maxX = -Infinity
+    let minY = Infinity
+    let maxY = -Infinity
+    for (const cell of CELLS) {
+      const pos = positions.get(cell.id)!
+      minX = Math.min(minX, pos.x - width / 2)
+      maxX = Math.max(maxX, pos.x + width / 2)
+      minY = Math.min(minY, pos.y - SIZE)
+      maxY = Math.max(maxY, pos.y + SIZE)
+    }
+    return { minX, maxX, minY, maxY }
+  }, [positions, width])
+
+  const viewBoxX = bounds.minX - MARGIN_X
+  const viewBoxY = bounds.minY - MARGIN_TOP
+  const viewBoxW = bounds.maxX - bounds.minX + MARGIN_X * 2
+  const viewBoxH = bounds.maxY - bounds.minY + MARGIN_TOP + MARGIN_BOTTOM
+  const midY = (bounds.minY + bounds.maxY) / 2
+  const midX = (bounds.minX + bounds.maxX) / 2
 
   const winningSet = useMemo(() => new Set(state.winningPath ?? []), [state.winningPath])
 
@@ -31,9 +56,14 @@ export function HexBoard({ state, onSelect, interactive, pendingHexId }: HexBoar
     return 'url(#hexEmpty)'
   }
 
+  const labelFor = (cellId: number, cellState: CellState) => {
+    if (cellState === 'gray') return '?'
+    return variant === 'classic' ? String(cellId) : state.cellLetters[cellId]
+  }
+
   return (
     <svg
-      viewBox={`${-offsetX} ${-PADDING} ${viewBoxW} ${viewBoxH}`}
+      viewBox={`${viewBoxX} ${viewBoxY} ${viewBoxW} ${viewBoxH}`}
       className="w-full h-auto max-w-[620px] select-none touch-manipulation"
       role="group"
       aria-label="Herní deska"
@@ -54,33 +84,33 @@ export function HexBoard({ state, onSelect, interactive, pendingHexId }: HexBoar
 
       {/* side labels */}
       <text
-        x={-offsetX + 18}
-        y={totalHeight / 2 - offsetY + PADDING}
+        x={bounds.minX - 14}
+        y={midY}
         fill="#a893d6"
         fontSize="13"
         fontWeight={700}
         letterSpacing="0.12em"
         className="font-display uppercase"
-        transform={`rotate(-60, ${-offsetX + 18}, ${totalHeight / 2 - offsetY + PADDING})`}
+        transform={`rotate(-60, ${bounds.minX - 14}, ${midY})`}
       >
         Levá strana
       </text>
       <text
-        x={offsetX - 18}
-        y={totalHeight / 2 - offsetY + PADDING}
+        x={bounds.maxX + 14}
+        y={midY}
         fill="#a893d6"
         fontSize="13"
         fontWeight={700}
         letterSpacing="0.12em"
         textAnchor="end"
         className="font-display uppercase"
-        transform={`rotate(60, ${offsetX - 18}, ${totalHeight / 2 - offsetY + PADDING})`}
+        transform={`rotate(60, ${bounds.maxX + 14}, ${midY})`}
       >
         Pravá strana
       </text>
       <text
-        x={0}
-        y={totalHeight - offsetY + SIZE + 34}
+        x={midX}
+        y={bounds.maxY + 34}
         fill="#a893d6"
         fontSize="13"
         fontWeight={700}
@@ -93,18 +123,17 @@ export function HexBoard({ state, onSelect, interactive, pendingHexId }: HexBoar
 
       {CELLS.map((cell) => {
         const pos = positions.get(cell.id)!
-        const cx = pos.x
-        const cy = pos.y - offsetY + PADDING
         const cellState = state.cells[cell.id]
         const isOpen = cellState === 'empty' || cellState === 'gray'
         const isClickable = interactive && isOpen
         const isWinning = winningSet.has(cell.id)
         const isPending = pendingHexId === cell.id
+        const label = labelFor(cell.id, cellState)
 
         return (
           <g
             key={cell.id}
-            transform={`translate(${cx}, ${cy})`}
+            transform={`translate(${pos.x}, ${pos.y})`}
             onClick={() => isClickable && onSelect(cell.id)}
             className={isClickable ? 'cursor-pointer' : 'cursor-default'}
           >
@@ -124,12 +153,12 @@ export function HexBoard({ state, onSelect, interactive, pendingHexId }: HexBoar
             <text
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={state.cellLetters[cell.id]?.length > 1 ? 16 : 20}
+              fontSize={label?.length > 1 ? 16 : 20}
               fontWeight={800}
               fill={cellState === 1 || cellState === 2 ? '#0b0518' : cellState === 'gray' ? '#8a7fa8' : '#d9c9ff'}
               className="font-display pointer-events-none"
             >
-              {cellState === 'gray' ? '?' : state.cellLetters[cell.id]}
+              {label}
             </text>
           </g>
         )

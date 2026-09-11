@@ -7,12 +7,13 @@ import { ResultToast } from './ResultToast'
 import { useGame } from '../game/useGame'
 import { isAnswerAccepted } from '../game/normalize'
 import { aiPickYesNo, aiWillAnswerLetter, aiWillAnswerYesNo, pickHexForAI } from '../game/ai'
-import type { GameMode, LetterQuestion, YesNoQuestion } from '../game/types'
+import type { BoardVariant, GameMode, LetterQuestion, YesNoQuestion } from '../game/types'
 
 const TIME_LIMIT = 18
 
 interface GameScreenProps {
   mode: GameMode
+  variant: BoardVariant
   p1Name: string
   p2Name: string
   letterQuestions: LetterQuestion[]
@@ -22,6 +23,7 @@ interface GameScreenProps {
 
 export function GameScreen({
   mode,
+  variant,
   p1Name,
   p2Name,
   letterQuestions,
@@ -30,6 +32,7 @@ export function GameScreen({
 }: GameScreenProps) {
   const { state, openQuestion, submitLetterAnswer, submitYesNo, reset } = useGame(
     mode,
+    variant,
     p1Name,
     p2Name,
     letterQuestions,
@@ -142,6 +145,7 @@ export function GameScreen({
       <div className="flex w-full flex-1 items-center justify-center">
         <HexBoard
           state={state}
+          variant={variant}
           onSelect={(hexId) => boardInteractive && openQuestion(hexId)}
           interactive={boardInteractive}
           pendingHexId={state.activeQuestion?.hexId ?? null}
@@ -170,7 +174,7 @@ export function GameScreen({
       {state.winner && (
         <WinOverlay
           winner={state.players[state.winner]}
-          onRematch={() => reset(mode, p1Name, p2Name)}
+          onRematch={() => reset(mode, variant, p1Name, p2Name)}
           onMenu={onExit}
         />
       )}
