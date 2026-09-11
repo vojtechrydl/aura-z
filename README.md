@@ -45,9 +45,12 @@ Board má 28 polí. Na výběr jsou dva módy desky:
 - **Classic** — pole jsou očíslovaná 1–28. Na začátku hry se pro každé pole
   náhodně vylosuje jedna otázka z celé banky (bez vazby na písmeno) — čistá
   loterie, větší rozptyl.
-- **Finále** — pole mají přidělené písmeno (z abecedy, pro kterou existují
-  otázky), přesně jako na skutečné hrací ploše AZ-kvízu. Otázka se vybere
-  podle písmena pole až ve chvíli, kdy se na něj klikne.
+- **Finále** — pole mají přidělené písmeno, přesně jako na skutečné hrací
+  ploše AZ-kvízu: **A je úplně nahoře, pod ním abecedně B a C, pak D–F** a tak
+  dále dolů řádek po řádku. Protože otázek je víc písmen (30), než má deska
+  polí (28), každá hra náhodně vynechá dvě písmena — ale rozestavění
+  zbylých je vždy přísně abecední, nikdy náhodné. Otázka se vybere podle
+  písmena pole až ve chvíli, kdy se na něj klikne.
 
 V obou módech se **odpovídá psaním** (žádné ABCD — volný text jako ve
 skutečném pořadu). Odpověď se porovná bez ohledu na velikost písmen,
@@ -56,11 +59,19 @@ diakritiku a interpunkci, navíc se uznávají i varianty ze sloupce
 
 - **Klikneš na volné (bílé) pole** → dostaneš jeho otázku a napíšeš odpověď.
   - Správně → pole se zabarví barvou hráče.
-  - Špatně / vypršel čas → pole **zešedne** a je znovu volné.
-- **Klikneš na šedé pole** → tentokrát dostaneš **otázku ANO/NE** z druhé
-  sady (v obou módech stejně — druhý pokus se ptá jinak, aby to nebyla
-  stejná otázka jako napoprvé). Správně → pole se zabarví; špatně → zůstává
-  šedé a je pořád volné.
+  - Špatně / vypršel čas / "Nevím" → **soupeř dostane nabídku otázku
+    "ukrást"** (skutečné pravidlo AZ-kvízu, bod 10 pravidel ČT). Musí se
+    jasně rozhodnout ANO/NE:
+    - **Odmítne** → pole zešedne, tah normálně pokračuje soupeřem.
+    - **Přijme** → dostane tu samou otázku, ale **bez nároku na opravu**
+      (na rozdíl od původního hráče — jeden pokus, buď uhodne, nebo ne).
+      Uhodne → pole získává on. Neuhodne → pole zešedne. V obou případech
+      je pak znovu na tahu původní hráč (tah se, jako vždy, prostě střídá
+      podle toho, kdo právě odpovídal).
+  - Krádež se týká jen čerstvých (bílých) polí — u šedých už ne.
+- **Klikneš na šedé pole** → dostaneš **otázku ANO/NE** z druhé sady (bez
+  možnosti krádeže). Správně → pole se zabarví; špatně → zůstává šedé a je
+  pořád volné.
 - **Kdo začíná se losuje náhodně** při startu každé hry (i proti AI) — krátký
   banner nahoře oznámí, kdo vyhrál los.
 - Tah se vždy střídá, bez ohledu na výsledek.
@@ -80,6 +91,13 @@ diakritiku a interpunkci, navíc se uznávají i varianty ze sloupce
   ([src/game/sounds.ts](src/game/sounds.ts)), žádné externí zvukové soubory.
   Správná/špatná odpověď, start hry, výhra, klik na pole. Ztlumit jde
   ikonou 🔊/🔇 v herním HUD (uloží se do `localStorage`).
+- **Ikony pro mobil** — `public/favicon.svg` je zdroj (hex logo na tmavém
+  podkladu), `apple-touch-icon.png` + `icon-192.png`/`icon-512.png` +
+  `manifest.webmanifest` jsou z něj vyrenderované PNG varianty (bez nich
+  mobilní prohlížeče/„Přidat na plochu" ukazují prázdnou/výchozí ikonu —
+  SVG favicon samo o sobě na mobilu nestačí). Při změně loga je potřeba PNG
+  znovu vygenerovat, např. přes `qlmanage -t -s 1024 -o <dir> favicon.svg`
+  (macOS QuickLook, umí vykreslit SVG) a `sips -z <N> <N>` na zmenšení.
 
 ## Formát otázek
 
@@ -104,9 +122,11 @@ AZ-001,A,"Jak se slangově říká vyzařování a charismatu?",Aura,auru,Slang,
 - `trvanlivost` — `evergreen` / `sezónní`, jen metadata pro budoucí filtrování
   (dnes se nepoužívá v herní logice).
 
-V módu Finále je potřeba **aspoň tolik různých písmen, kolik chceš mít na
-desce (28)** — při méně unikátních písmenech se některá zopakují na víc
-polích. V módu Classic stačí, aby bylo v souboru aspoň 28 otázek celkem.
+Aktuálně 360 otázek (12 na každé z 30 písmen). V módu Finále je potřeba
+**aspoň tolik různých písmen, kolik chceš mít na desce (28)** — při méně
+unikátních písmenech se některá zopakují na víc polích, při víc (jako teď)
+se každou hru náhodně vynechají dvě. V módu Classic stačí, aby bylo
+v souboru aspoň 28 otázek celkem.
 
 ### `public/questions-yesno.csv` — dotahy na šedá pole
 
@@ -117,6 +137,8 @@ AN-001,Instagram původně vznikl jako aplikace na check-iny do podniků.,ANO,Jm
 
 - `spravne` — `ANO` nebo `NE`.
 - `vysvetleni` — nepovinné, zobrazí se po odpovědi jako bonus info.
+
+Aktuálně 70 otázek.
 
 ## Nasazení na Railway
 
@@ -141,11 +163,13 @@ src/
     useQuestions.ts          # načtení + parsování obou CSV
     ai.ts                     # AI protihráč (výběr pole, přesnost, ANO/NE)
     sounds.ts                  # syntetizované zvukové efekty (Web Audio API)
-  components/        # UI (deska, menu, otázka, HUD, výhra…)
+  components/        # UI (deska, menu, otázka, nabídka krádeže, HUD, výhra…)
   useTheme.ts          # tmavý/světlý motiv (localStorage + data-theme na <html>)
 public/
   questions-letters.csv   # hlavní banka otázek (na písmeno)
   questions-yesno.csv      # dotahy na šedá pole (ANO/NE)
+  favicon.svg, apple-touch-icon.png, icon-192/512.png, manifest.webmanifest
+                            # ikony pro mobil (viz níže)
 server.js              # produkční static server (Railway)
 railway.json            # Railway build/deploy konfigurace
 ```

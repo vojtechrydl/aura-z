@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { HexBoard } from './HexBoard'
 import { GameHUD } from './GameHUD'
 import { QuestionModal } from './QuestionModal'
+import { StealOfferModal } from './StealOfferModal'
 import { WinOverlay } from './WinOverlay'
 import { ResultToast } from './ResultToast'
 import { useGame } from '../game/useGame'
@@ -31,14 +32,8 @@ export function GameScreen({
   yesNoQuestions,
   onExit,
 }: GameScreenProps) {
-  const { state, openQuestion, submitLetterAnswer, submitYesNo, reset } = useGame(
-    mode,
-    variant,
-    p1Name,
-    p2Name,
-    letterQuestions,
-    yesNoQuestions,
-  )
+  const { state, openQuestion, submitLetterAnswer, submitYesNo, declineSteal, acceptSteal, reset } =
+    useGame(mode, variant, p1Name, p2Name, letterQuestions, yesNoQuestions)
 
   const [showStartBanner, setShowStartBanner] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -70,8 +65,19 @@ export function GameScreen({
   const finishLetterAnswer = (text: string) => {
     if (!state.activeQuestion || state.activeQuestion.kind !== 'letter') return
     const q = state.activeQuestion.question
+    const isSteal = state.activeQuestion.isSteal
     const correct = isAnswerAccepted(text, q.answer, q.altAnswers)
     setInputValue(text)
+
+    if (!correct && !isSteal) {
+      // A fresh (non-steal) miss doesn't reveal the answer here — that would
+      // spoil the steal offer the opponent is about to get. Hand off
+      // immediately; useGame swaps this into a stealOffer.
+      playWrong()
+      submitLetterAnswer(text)
+      return
+    }
+
     setRevealed(true)
     setRevealCorrect(correct)
     correct ? playCorrect() : playWrong()
@@ -107,7 +113,7 @@ export function GameScreen({
 
   // AI: pick a hex on its turn
   useEffect(() => {
-    if (state.winner || state.activeQuestion) return
+    if (state.winner || state.activeQuestion || state.stealOffer) return
     const current = state.players[state.currentPlayer]
     if (!current.isAI) return
     const t = window.setTimeout(() => {
@@ -117,7 +123,7 @@ export function GameScreen({
     timers.current.push(t)
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.winner, state.activeQuestion, state.currentPlayer, state.cells])
+  }, [state.winner, state.activeQuestion, state.stealOffer, state.currentPlayer, state.cells])
 
   // AI: "think" then answer
   useEffect(() => {
@@ -138,6 +144,19 @@ export function GameScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.activeQuestion, isAITurn])
 
+  // AI: decide whether to accept a steal offer
+  useEffect(() => {
+    if (!state.stealOffer) return
+    const stealer = state.players[state.stealOffer.stealingPlayer]
+    if (!stealer.isAI) return
+    const willSucceed = aiWillAnswerLetter(state.stealOffer.question)
+    const accept = willSucceed || Math.random() < 0.2
+    const t = window.setTimeout(() => (accept ? acceptSteal() : declineSteal()), 900)
+    timers.current.push(t)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.stealOffer])
+
   useEffect(() => clearTimers, [])
 
   // fires exactly once, right when a null->playerId transition happens
@@ -157,7 +176,10 @@ export function GameScreen({
   }, [state.cellLetters, state.cellQuestions])
 
   const boardInteractive =
-    !state.activeQuestion && !state.winner && !state.players[state.currentPlayer].isAI
+    !state.activeQuestion &&
+    !state.stealOffer &&
+    !state.winner &&
+    !state.players[state.currentPlayer].isAI
 
   return (
     <div className="flex min-h-dvh w-full flex-col items-center gap-6 px-4 py-6 sm:py-8">
@@ -173,7 +195,7 @@ export function GameScreen({
             openQuestion(hexId)
           }}
           interactive={boardInteractive}
-          pendingHexId={state.activeQuestion?.hexId ?? null}
+          pendingHexId={state.activeQuestion?.hexId ?? state.stealOffer?.hexId ?? null}
         />
       </div>
 
@@ -211,6 +233,17 @@ export function GameScreen({
           onDontKnow={() => finishLetterAnswer('')}
           yesNoPick={yesNoPick}
           onPickYesNo={finishYesNo}
+        />
+      )}
+
+      {state.stealOffer && (
+        <StealOfferModal
+          offer={state.stealOffer}
+          originalPlayer={state.players[state.stealOffer.originalPlayer]}
+          stealingPlayer={state.players[state.stealOffer.stealingPlayer]}
+          isAI={state.players[state.stealOffer.stealingPlayer].isAI}
+          onAccept={acceptSteal}
+          onDecline={declineSteal}
         />
       )}
 

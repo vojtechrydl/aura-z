@@ -44,8 +44,21 @@ export interface YesNoQuestion {
 }
 
 export type ActiveQuestion =
-  | { kind: 'letter'; hexId: number; forPlayer: PlayerId; question: LetterQuestion }
+  | { kind: 'letter'; hexId: number; forPlayer: PlayerId; question: LetterQuestion; isSteal?: boolean }
   | { kind: 'yesno'; hexId: number; forPlayer: PlayerId; question: YesNoQuestion }
+
+/**
+ * A real AZ-kvíz rule (bod 10 pravidel ČT): when the picking player misses a
+ * fresh (letter/number) question, the opponent gets a one-shot "dokvíz" —
+ * they must clearly accept or decline before they're shown the same
+ * question again. No retry if they get it wrong, unlike the original asker.
+ */
+export interface StealOffer {
+  hexId: number
+  question: LetterQuestion
+  originalPlayer: PlayerId
+  stealingPlayer: PlayerId
+}
 
 export interface GameState {
   mode: GameMode
@@ -58,6 +71,7 @@ export interface GameState {
   currentPlayer: PlayerId
   players: Record<PlayerId, PlayerConfig>
   activeQuestion: ActiveQuestion | null
+  stealOffer: StealOffer | null
   winner: PlayerId | null
   winningPath: number[] | null
   lastResult: {
@@ -67,6 +81,7 @@ export interface GameState {
     kind: 'letter' | 'yesno'
     revealAnswer?: string
     revealExplanation?: string
+    wasSteal?: boolean
   } | null
   turnCount: number
 }

@@ -18,6 +18,10 @@ const PALETTE = {
   p2: { color: 'var(--color-p2)', soft: 'var(--color-p2-soft)' },
 }
 
+function otherPlayer(id: PlayerId): PlayerId {
+  return id === 1 ? 2 : 1
+}
+
 function makeInitialCells(): Record<number, CellState> {
   const cells: Record<number, CellState> = {}
   for (const c of CELLS) cells[c.id] = 'empty'
@@ -55,6 +59,7 @@ export function makeInitialState(
     currentPlayer: Math.random() < 0.5 ? 1 : 2,
     players: makePlayers(mode, player1Name, player2Name),
     activeQuestion: null,
+    stealOffer: null,
     winner: null,
     winningPath: null,
     lastResult: null,
@@ -98,7 +103,7 @@ export function useGame(
   const openQuestion = useCallback(
     (hexId: number) => {
       setState((s) => {
-        if (s.winner || s.activeQuestion) return s
+        if (s.winner || s.activeQuestion || s.stealOffer) return s
         const cellState = s.cells[hexId]
         if (cellState !== 'empty' && cellState !== 'gray') return s
 
@@ -124,46 +129,107 @@ export function useGame(
     [pickLetterQuestion, pickYesNoQuestion],
   )
 
-  const resolveTurn = useCallback((hexId: number, forPlayer: PlayerId, correct: boolean, kind: 'letter' | 'yesno', revealAnswer?: string, revealExplanation?: string) => {
-    setState((s) => {
-      const nextCells: Record<number, CellState> = {
-        ...s.cells,
-        [hexId]: correct ? forPlayer : 'gray',
-      }
-
-      let winner: PlayerId | null = null
-      let winningPath: number[] | null = null
-      if (correct) {
-        const claimed = new Set(CELLS.filter((c) => nextCells[c.id] === forPlayer).map((c) => c.id))
-        const path = checkWin(claimed)
-        if (path) {
-          winner = forPlayer
-          winningPath = path
+  const resolveTurn = useCallback(
+    (
+      hexId: number,
+      forPlayer: PlayerId,
+      correct: boolean,
+      kind: 'letter' | 'yesno',
+      revealAnswer?: string,
+      revealExplanation?: string,
+      wasSteal?: boolean,
+    ) => {
+      setState((s) => {
+        const nextCells: Record<number, CellState> = {
+          ...s.cells,
+          [hexId]: correct ? forPlayer : 'gray',
         }
+
+        let winner: PlayerId | null = null
+        let winningPath: number[] | null = null
+        if (correct) {
+          const claimed = new Set(CELLS.filter((c) => nextCells[c.id] === forPlayer).map((c) => c.id))
+          const path = checkWin(claimed)
+          if (path) {
+            winner = forPlayer
+            winningPath = path
+          }
+        }
+
+        return {
+          ...s,
+          cells: nextCells,
+          activeQuestion: null,
+          stealOffer: null,
+          winner,
+          winningPath,
+          currentPlayer: winner ? s.currentPlayer : forPlayer === 1 ? 2 : 1,
+          lastResult: { hexId, correct, player: forPlayer, kind, revealAnswer, revealExplanation, wasSteal },
+          turnCount: s.turnCount + 1,
+        }
+      })
+    },
+    [],
+  )
+
+  const submitLetterAnswer = useCallback(
+    (text: string) => {
+      if (!state.activeQuestion || state.activeQuestion.kind !== 'letter') return
+      const { hexId, forPlayer, question, isSteal } = state.activeQuestion
+      const correct = isAnswerAccepted(text, question.answer, question.altAnswers)
+
+      if (!correct && !isSteal) {
+        // Real AZ-kvíz rule (pravidla ČT, bod 10): the picker missed a fresh
+        // question — the opponent gets first refusal on a one-shot steal
+        // before the tile greys out and the answer is revealed.
+        setState((s) => ({
+          ...s,
+          activeQuestion: null,
+          stealOffer: { hexId, question, originalPlayer: forPlayer, stealingPlayer: otherPlayer(forPlayer) },
+        }))
+        return
       }
 
+      resolveTurn(hexId, forPlayer, correct, 'letter', question.answer, undefined, isSteal)
+    },
+    [state.activeQuestion, resolveTurn],
+  )
+
+  const declineSteal = useCallback(() => {
+    setState((s) => {
+      if (!s.stealOffer) return s
+      const { hexId, originalPlayer, question } = s.stealOffer
+      // Same outcome as an un-stolen miss: tile greys out, turn passes on
+      // from the original picker — which the existing toggle already does.
+      const nextCells: Record<number, CellState> = { ...s.cells, [hexId]: 'gray' }
       return {
         ...s,
         cells: nextCells,
-        activeQuestion: null,
-        winner,
-        winningPath,
-        currentPlayer: winner ? s.currentPlayer : forPlayer === 1 ? 2 : 1,
-        lastResult: { hexId, correct, player: forPlayer, kind, revealAnswer, revealExplanation },
+        stealOffer: null,
+        currentPlayer: otherPlayer(originalPlayer),
+        lastResult: {
+          hexId,
+          correct: false,
+          player: originalPlayer,
+          kind: 'letter',
+          revealAnswer: question.answer,
+        },
         turnCount: s.turnCount + 1,
       }
     })
   }, [])
 
-  const submitLetterAnswer = useCallback(
-    (text: string) => {
-      if (!state.activeQuestion || state.activeQuestion.kind !== 'letter') return
-      const { hexId, forPlayer, question } = state.activeQuestion
-      const correct = isAnswerAccepted(text, question.answer, question.altAnswers)
-      resolveTurn(hexId, forPlayer, correct, 'letter', question.answer)
-    },
-    [state.activeQuestion, resolveTurn],
-  )
+  const acceptSteal = useCallback(() => {
+    setState((s) => {
+      if (!s.stealOffer) return s
+      const { hexId, question, stealingPlayer } = s.stealOffer
+      return {
+        ...s,
+        stealOffer: null,
+        activeQuestion: { kind: 'letter', hexId, forPlayer: stealingPlayer, question, isSteal: true },
+      }
+    })
+  }, [])
 
   const submitYesNo = useCallback(
     (picked: boolean) => {
@@ -190,5 +256,13 @@ export function useGame(
     [letterQuestions],
   )
 
-  return { state, openQuestion, submitLetterAnswer, submitYesNo, reset }
+  return {
+    state,
+    openQuestion,
+    submitLetterAnswer,
+    submitYesNo,
+    declineSteal,
+    acceptSteal,
+    reset,
+  }
 }

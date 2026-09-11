@@ -16,8 +16,16 @@ export function ResultToast({ state }: ResultToastProps) {
   }, [state.lastResult, state.turnCount])
 
   if (!state.lastResult || !visible) return null
-  const { correct, player, hexId } = state.lastResult
+  const { correct, player, hexId, wasSteal } = state.lastResult
   const p = state.players[player]
+
+  const message = wasSteal
+    ? correct
+      ? `${p.name} ukradl(a) pole #${hexId}!`
+      : `${p.name} krádež nevyšla, pole #${hexId} zůstává šedé`
+    : correct
+      ? `${p.name}: pole #${hexId} zabarveno!`
+      : `${p.name}: pole #${hexId} zešedlo`
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-24 z-40 flex justify-center px-4">
@@ -28,10 +36,8 @@ export function ResultToast({ state }: ResultToastProps) {
             : 'border-rose-400/40 bg-rose-400/15 text-rose-200'
         }`}
       >
-        <span>{correct ? '✅' : '❌'}</span>
-        <span>
-          {p.name}: {correct ? `pole #${hexId} zabarveno!` : `pole #${hexId} zešedlo`}
-        </span>
+        <span>{wasSteal ? '🕵️' : correct ? '✅' : '❌'}</span>
+        <span>{message}</span>
       </div>
     </div>
   )
