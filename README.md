@@ -78,6 +78,39 @@ diakritiku a interpunkci, navíc se uznávají i varianty ze sloupce
 - **Vyhrává hráč, jehož souvislá skupina políček stejné barvy spojí
   všechny tři strany trojúhelníku** (Levá / Pravá / Spodní).
 
+## AI protihráč
+
+AZ-kvíz je pod znalostní vrstvou **spojovací hra typu Y** — vyhrává, kdo
+propojí všechny tři strany trojúhelníku. AI proto neuvažuje v „sousedech", ale
+v tom, kolik polí ještě reálně potřebuje k výhře, a totéž počítá za hráče.
+Implementace: [src/game/ai.ts](src/game/ai.ts).
+
+- **Zbývající náklady na výhru** se počítají přesně, ne odhadem. Třikrát
+  0-1 BFS (jednou z každé strany) dá pro každé pole vzdálenost k té straně,
+  a `min(dL + dP + dD − 2·cena)` přes všechna pole je velikost optimálního
+  Steinerova stromu o třech terminálech. Na prázdné desce vyjde 7 — což je
+  přesně délka nejkratší výhry.
+- **Ohodnocení tahu** je `α·zisk_útok + β·zisk_obrana`, kde se váhy mění podle
+  toho, kdo je blíž: když AI prohrává, blokuje (α 1 / β 2), když vede, staví
+  (α 2 / β 1). K tomu **očekávaná hodnota** — AI ví, že otázku nemusí trefit
+  a že o pole pak může přijít dokvízem.
+- **Statická tabulka** (kolika ze 736 minimálních vítězných sedmic pole
+  prochází) rozstřeluje shody a rozhoduje otvírku, kde jsou z pohledu nákladů
+  všechna pole stejná. Střed desky je 5× cennější než vrchol a rohy — ty sice
+  patří dvěma stranám naráz, ale jsou maximálně daleko od té třetí.
+- **Taktické zkratky** před běžným ohodnocením: výhru na tahu AI vždy vezme
+  a pole, kterým by hráč příští tah vyhrál, vždy zablokuje.
+- Dvě odchylky od učebnicového algoritmu, protože tahle hra má jiná pravidla:
+  šedé pole tu **není** blokující (jde znovu dobýt otázkou ANO/NE), takže se
+  v nákladech počítá stejně jako prázdné a „zčernání" nemá obrannou hodnotu;
+  a dokvíz se týká jen čerstvých polí, u šedých tedy AI s krádeží nepočítá.
+- Stromové prohledávání (alfa-beta/MCTS) tu záměrně **není** — při větvení 28
+  se do plynulého běhu v prohlížeči nevejde a heuristika je na tuhle desku
+  dost silná. Celé ohodnocení tahu stojí ~0,2 ms.
+
+Sílu ladí konstanty na začátku souboru (`P_LETTER`, `Q_STEAL`, `GAMMA`,
+`JITTER`); `JITTER` je záměrná špetka náhody, aby AI nehrála pokaždé identicky.
+
 ## Vzhled a zvuk
 
 - **Tmavý/světlý motiv** — přepínač (☀️/🌙) v pravém horním rohu hlavního
@@ -161,7 +194,7 @@ src/
     types.ts             # sdílené typy
     useGame.ts             # herní stav (cells, cellLetters, activeQuestion…)
     useQuestions.ts          # načtení + parsování obou CSV
-    ai.ts                     # AI protihráč (výběr pole, přesnost, ANO/NE)
+    ai.ts                     # AI protihráč (strategie výběru pole, přesnost, ANO/NE)
     sounds.ts                  # syntetizované zvukové efekty (Web Audio API)
   components/        # UI (deska, menu, otázka, nabídka krádeže, HUD, výhra…)
   useTheme.ts          # tmavý/světlý motiv (localStorage + data-theme na <html>)

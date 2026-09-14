@@ -41,6 +41,14 @@ co README nepokrývá.
   úplně stejným togglem jako běžná odpověď (`forPlayer===1?2:1`) — stačí při
   přijetí nabídky nastavit `forPlayer` na zloděje, žádná speciální logika
   navíc není potřeba. Netýká se šedých (ANO/NE) polí, jen prvního pokusu.
+- **AI protihráč** hraje podle spojovací strategie (Steinerův strom o třech
+  terminálech přes 0-1 BFS + EV + statická tabulka cennosti polí) — viz
+  README → AI protihráč pro princip, `src/game/ai.ts` pro implementaci.
+  Ohodnocení tahu stojí ~0,2 ms, takže se počítá naostro; stromové
+  prohledávání tu záměrně není. Ověřeno self-play proti původní heuristice
+  (soused-preference): 93 % výher z 2000 her při stejné přesnosti odpovědí.
+  Tabulka `CELL_WEIGHT` je ověřená vyčerpávajícím výčtem — sedí na 736
+  minimálních vítězných sedmic, neupravovat ručně.
 - Světlý motiv a zvukové efekty jsou hotové (viz README → Vzhled a zvuk).
   Zvuky jsou syntetizované za běhu (Web Audio API), žádné audio soubory
   v repu ani k nahrávání.
