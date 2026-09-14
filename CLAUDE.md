@@ -11,8 +11,8 @@ co README nepokrývá.
   na propojení v Railway dashboardu (viz README → Nasazení) — to je jediný
   krok, který nejde udělat z CLI/API bez přihlášení uživatele v prohlížeči.
 - Otázky jsou hotové, uživatelovy vlastní (ne placeholder): `public/questions-letters.csv`
-  (360 otázek na písmeno, volná textová odpověď) a `public/questions-yesno.csv`
-  (70 ANO/NE otázek pro dotahy na šedá pole). Formát obou je zdokumentovaný
+  (420 otázek na písmeno, volná textová odpověď) a `public/questions-yesno.csv`
+  (80 ANO/NE otázek pro dotahy na šedá pole). Formát obou je zdokumentovaný
   v README → Formát otázek. Uživatel čas od času posílá aktualizovanou verzi
   obou CSV (víc otázek) — při nahrazení stačí zachovat hlavičku a strukturu.
 - Herní pravidlo: vyhrává hráč, který svou barvou spojí **všechny tři**

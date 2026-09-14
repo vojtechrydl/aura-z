@@ -59,7 +59,7 @@ export function assignCellLetters(availableLetters: string[]): Record<number, st
  * Classic mode: pre-draws one random question per hex at game start,
  * independent of any letter — a straight lottery over the whole bank. Each
  * tile gets a distinct question as long as the bank is at least as big as
- * the board (it is: 360 questions for 28 tiles); otherwise questions repeat.
+ * the board (it is: 420 questions for 28 tiles); otherwise questions repeat.
  */
 export function assignCellQuestions(pool: LetterQuestion[]): Record<number, LetterQuestion> {
   if (pool.length === 0) {

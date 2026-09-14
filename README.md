@@ -155,7 +155,7 @@ AZ-001,A,"Jak se slangově říká vyzařování a charismatu?",Aura,auru,Slang,
 - `trvanlivost` — `evergreen` / `sezónní`, jen metadata pro budoucí filtrování
   (dnes se nepoužívá v herní logice).
 
-Aktuálně 360 otázek (12 na každé z 30 písmen). V módu Finále je potřeba
+Aktuálně 420 otázek (14 na každé z 30 písmen). V módu Finále je potřeba
 **aspoň tolik různých písmen, kolik chceš mít na desce (28)** — při méně
 unikátních písmenech se některá zopakují na víc polích, při víc (jako teď)
 se každou hru náhodně vynechají dvě. V módu Classic stačí, aby bylo
@@ -171,7 +171,7 @@ AN-001,Instagram původně vznikl jako aplikace na check-iny do podniků.,ANO,Jm
 - `spravne` — `ANO` nebo `NE`.
 - `vysvetleni` — nepovinné, zobrazí se po odpovědi jako bonus info.
 
-Aktuálně 70 otázek.
+Aktuálně 80 otázek (40× ANO, 40× NE).
 
 ## Nasazení na Railway
 
